@@ -31,8 +31,9 @@ export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
     }, []);
 
     function onPieceDrop(sourceSquare: Square, targetSquare: Square): boolean {
-        // compare isMySide
-        if (mySide && chess.turn() !== mySide) return false;
+
+        const chessTurnFull = chess.turn() === "w" ? "white" : "black";
+        if (mySide && chessTurnFull !== mySide) return false;
 
         const move = chess.move({
             from: sourceSquare,

@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {useGameStore} from "../../../shared/model/game/store.ts";
 import {socket} from "../../../shared/api/socket.ts";
-import {GameLobby} from "../../../features/game-lobby";
 
 import styles from './styles.module.scss'
 import {useNavigate} from "react-router-dom";
+import {PlayerGamePanel} from "../../../features/game-panel";
 
 export const HomePage = () => {
     const navigate = useNavigate();
@@ -36,8 +36,6 @@ export const HomePage = () => {
         };
     }, []);
 
-    console.log('Home page render');
-
     const onPlayWithRobot = () => {
         navigate('/robot');
     }
@@ -45,7 +43,7 @@ export const HomePage = () => {
     function renderContent() {
         switch (true) {
             case !!opponent:
-                return <GameLobby/>;
+                return <PlayerGamePanel/>;
             default:
                 return (
                     <div className={styles.searchWrapper}>

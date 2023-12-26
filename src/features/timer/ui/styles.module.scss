@@ -1,0 +1,16 @@
+.playerWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.playerWrapper.bottomSide {
+  //justify-content: flex-end;
+}
+
+.playerName {
+  margin-right: 10px;
+}
+.playerTime {
+  font-size: 24px;
+  font-weight: 600;
+}

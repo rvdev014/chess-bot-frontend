@@ -1,8 +1,12 @@
 import {create} from "zustand";
-import {IGameStore} from "./store-types.ts";
+import {IGameOverState, IGameStore, IMoveState} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {Chess, PieceSymbol} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
+import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
+import {lcFirst} from "../../utils.ts";
+
+const defaultTimeLimit = 10;
 
 const initialStore = {
     chess: new Chess(),
@@ -13,6 +17,9 @@ const initialStore = {
     isGameOver: false,
     isViewMode: false,
     gameOverReason: null,
+    timeLimit: defaultTimeLimit,
+    myTimeLeft: defaultTimeLimit,
+    opponentTimeLeft: defaultTimeLimit,
 } as IGameStore;
 
 const params = new URLSearchParams(window.location.search);
@@ -27,7 +34,6 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         initGame(isRobot = false) {
-            // const initialFen = null;
             const newChess = new Chess();
             set({
                 chess: newChess,
@@ -37,9 +43,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
             })
 
             if (isRobot) {
-
-                set({mySide: 'w', isMyTurn: true});
-
+                set({mySide: 'white', isMyTurn: true});
                 get().engine.onMessage(({bestMove}) => {
                     if (bestMove) {
                         setTimeout(() => {
@@ -59,59 +63,90 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         searchOpponent() {
-            try {
-                set({isSearching: true});
-                socket.emit('game:search', userId);
-            } catch (e) {
-                console.log(e)
-            }
+            set({isSearching: true});
+            socket.emit('game:search', userId);
         },
 
         cancelSearch() {
-            try {
-                set({isSearching: false});
-                socket.emit('game:search-cancel');
-            } catch (e) {
-                console.log(e)
-            }
+            set({isSearching: false});
+            socket.emit('game:search-cancel');
         },
 
         onGameStarted(opponent, mySide, roomId) {
             set({
                 isSearching: false,
                 opponent,
-                mySide: mySide,
-                isMyTurn: mySide === 'w',
+                mySide,
                 roomId,
+                isMyTurn: mySide === 'white',
             });
         },
 
         onMove(movement) {
-            const gameFen = get().chess.fen();
+            const lastFen = get().chess.fen();
             set({
                 isMyTurn: false,
-                gamePosition: gameFen,
+                gamePosition: lastFen,
             })
 
+            const mySide = get().mySide;
             if (!get().isRobot) {
-                socket.emit('game:move', movement, gameFen);
+                const moveState = {
+                    movement,
+                    lastFen,
+                    side: mySide,
+                    whiteTimeLeft: mySide === 'white' ? get().myTimeLeft : get().opponentTimeLeft,
+                    blackTimeLeft: mySide === 'black' ? get().myTimeLeft : get().opponentTimeLeft,
+                } as IMoveState;
+
+                socket.emit('game:move', moveState);
             }
         },
 
-        onOpponentMove(movement) {
-            get().chess.move(movement);
+        onOpponentMove(moveState) {
+            get().chess.move(moveState.movement);
             set({
                 isMyTurn: true,
                 gamePosition: get().chess.fen(),
             })
         },
 
-        onGameOver() {
-            const winner = get().chess.turn() === 'w' ? 'Black' : 'White';
+        onMyTimeChange() {
+            const currentTimeLeft = get().myTimeLeft;
+            if (currentTimeLeft == 0) {
+                get().onGameOver(get().mySide === 'white' ? 'black' : 'white', 'timeout')
+                return;
+            }
+            set({
+                myTimeLeft: currentTimeLeft - 1,
+            });
+        },
+
+        onOpponentTimeChange() {
+            const currentTimeLeft = get().opponentTimeLeft;
+            if (currentTimeLeft == 0) {
+                get().onGameOver(get().mySide === 'white' ? 'white' : 'black', 'timeout')
+                return;
+            }
+            set({
+                opponentTimeLeft: currentTimeLeft - 1,
+            });
+        },
+
+        onGameOver(winner, reason) {
             set({
                 isGameOver: true,
-                gameOverReason: `Checkmate! ${winner} wins!`,
+                gameOverReason: `${lcFirst(winner)} won! ${gameOverLabels[reason]}`,
             })
+
+            const gameOverState = {
+                winner,
+                reason,
+                whiteTimeLeft: get().mySide === 'white' ? get().myTimeLeft : get().opponentTimeLeft,
+                blackTimeLeft: get().mySide === 'black' ? get().myTimeLeft : get().opponentTimeLeft,
+            } as IGameOverState;
+
+            socket.emit('game:over', gameOverState);
         },
 
         onViewMode() {

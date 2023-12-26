@@ -5,7 +5,7 @@ import styles from './style.module.scss'
 import {Chess} from "chess.ts";
 import {Engine} from "../model/engine.ts";
 import {BoardPosition} from "react-chessboard/dist/chessboard/types";
-import {Side} from "../../../shared/model/game/store-types.ts";
+import {GameOverReasonType, SideType} from "../../../shared/model/game/store-types.ts";
 
 interface IProps extends React.ComponentProps<typeof Chessboard> {
     initialFen?: string;
@@ -15,14 +15,15 @@ interface IProps extends React.ComponentProps<typeof Chessboard> {
     chess: Chess;
     engine: Engine;
     gamePosition: string | BoardPosition | undefined;
-    mySide?: Side;
+    mySide?: SideType;
     isMyTurn: boolean;
     isGameOver: boolean;
     gameOverReason: string | null;
     isViewMode: boolean;
 
     onViewMode(): void;
-    onGameOver(): void;
+
+    onGameOver(winner: SideType, reason: GameOverReasonType): void;
 }
 
 export const MyChessboard: FC<IProps> = (
@@ -31,13 +32,14 @@ export const MyChessboard: FC<IProps> = (
 
     useEffect(() => {
         if (chess.gameOver() || chess.inDraw()) {
-            props.onGameOver();
+            props.onGameOver(
+                chess.turn() === 'w' ? 'black' : 'white',
+                chess.inDraw() ? 'draw' : 'checkmate'
+            );
             return;
         }
-        console.log('chess.turn()', chess.turn())
-        console.log('props.mySide', props.mySide)
-        console.log('props.isRobot', props.isRobot)
-        if (chess.turn() !== props.mySide && props.isRobot) {
+        const chessTurnFull = chess.turn() === 'w' ? 'white' : 'black';
+        if (chessTurnFull !== props.mySide && props.isRobot) {
             findBestMove();
         }
     }, [gamePosition])
@@ -63,7 +65,7 @@ export const MyChessboard: FC<IProps> = (
                 arePiecesDraggable={type === 'draggable'}
                 position={gamePosition}
                 animationDuration={300}
-                boardOrientation={props.mySide === 'w' ? 'white' : 'black'}
+                boardOrientation={props.mySide}
                 {...props}
             />
         </div>

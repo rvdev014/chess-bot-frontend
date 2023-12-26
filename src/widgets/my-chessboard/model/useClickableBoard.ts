@@ -2,9 +2,9 @@ import {useState} from "react";
 import {Move, Square} from "chess.ts/dist/types";
 import {PromotionPieceOption} from "react-chessboard/dist/chessboard/types";
 import {Chess, PieceSymbol} from "chess.ts";
-import {Side} from "../../../shared/model/game/store-types.ts";
+import {SideType} from "../../../shared/model/game/store-types.ts";
 
-export const useClickableBoard = (chess: Chess, mySide: Side, onMove: (move: Move) => void) => {
+export const useClickableBoard = (chess: Chess, mySide: SideType, onMove: (move: Move) => void) => {
     const [moveFrom, setMoveFrom] = useState<Square | null>(null);
     const [moveTo, setMoveTo] = useState<Square | null>(null);
     const [showPromotionDialog, setShowPromotionDialog] = useState(false);
@@ -41,7 +41,8 @@ export const useClickableBoard = (chess: Chess, mySide: Side, onMove: (move: Mov
 
     function onSquareClick(square: Square) {
         // compare mySide
-        if (mySide && chess.turn() !== mySide) return;
+        const chessTurnFull = chess.turn() === "w" ? "white" : "black";
+        if (mySide && chessTurnFull !== mySide) return;
 
         // from square
         if (!moveFrom) {

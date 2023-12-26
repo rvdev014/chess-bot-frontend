@@ -1,20 +1,14 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {socket} from "../../../shared/api/socket.ts";
-import {MyChessboardSimple} from "../../../widgets/my-chessboard/ui/simple.tsx";
 import {useGuestGameStore} from "../../../shared/model/guest-game/store.ts";
+import {GuestGamePanel} from "../../../features/game-panel";
 
-export const GamePage = () => {
+export const GuestGamePage = () => {
     const roomId = useParams().room;
-    console.log('roomId', roomId)
 
-    const chess = useGuestGameStore(state => state.chess);
-    const gamePosition = useGuestGameStore(state => state.gamePosition);
     const isLoading = useGuestGameStore(state => state.isLoading);
     const isGameFound = useGuestGameStore(state => state.isGameFound);
-    const isGameOver = useGuestGameStore(state => state.isGameOver);
-    const gameOverReason = useGuestGameStore(state => state.gameOverReason);
-    const onGameOver = useGuestGameStore(state => state.onGameOver);
 
     const initGuestGame = useGuestGameStore(state => state.initGuestGame);
     const resetGuestGame = useGuestGameStore(state => state.resetGuestGame);
@@ -23,6 +17,7 @@ export const GamePage = () => {
     const onDisconnect = useGuestGameStore(state => state.onDisconnect);
     const onMove = useGuestGameStore(state => state.onMove);
     const onOpponentDisconnected = useGuestGameStore(state => state.onOpponentDisconnected);
+    const onGameOverEvent = useGuestGameStore(state => state.onGameOverEvent);
 
     useEffect(() => {
         if (roomId) {
@@ -34,6 +29,7 @@ export const GamePage = () => {
         socket.on('disconnect', onDisconnect);
         socket.on('game:move', onMove);
         socket.on('game:disconnected', onOpponentDisconnected);
+        socket.on('game:over', onGameOverEvent);
 
         return () => {
             resetGuestGame();
@@ -42,6 +38,7 @@ export const GamePage = () => {
             socket.off('disconnect');
             socket.off('game:move');
             socket.off('game:disconnected');
+            socket.off('game:over');
         };
     }, []);
 
@@ -53,13 +50,7 @@ export const GamePage = () => {
                 return <div>Room id is invalid!</div>;
             default:
                 return (
-                    <MyChessboardSimple
-                        chess={chess}
-                        gamePosition={gamePosition}
-                        onGameOver={onGameOver}
-                        isGameOver={isGameOver}
-                        gameOverReason={gameOverReason}
-                    />
+                    <GuestGamePanel/>
                 );
         }
     }

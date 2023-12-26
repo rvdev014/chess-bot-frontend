@@ -6,9 +6,26 @@ import {BoardPosition} from "react-chessboard/dist/chessboard/types";
 export interface IOpponent {
     userId?: string;
     socketId: string;
+    timeLeft?: number;
 }
 
-export type Side = 'w' | 'b';
+export type SideType = 'white' | 'black';
+export type GameOverReasonType = 'checkmate' | 'timeout' | 'resign' | 'draw' | 'disconnect';
+
+export interface IMoveState {
+    movement: any;
+    lastFen: string;
+    side: 'white' | 'black';
+    whiteTimeLeft: number;
+    blackTimeLeft: number;
+}
+
+export interface IGameOverState {
+    winner: SideType;
+    reason: GameOverReasonType;
+    whiteTimeLeft: number;
+    blackTimeLeft: number;
+}
 
 export interface IGameStore {
     isSearching: boolean;
@@ -24,18 +41,21 @@ export interface IGameStore {
     opponent: IOpponent | null;
     roomId: string | null;
 
-    mySide: Side;
+    timeLimit: number;
+    myTimeLeft: number;
+    opponentTimeLeft: number;
+    mySide: SideType;
     gameOverReason: string | null;
 
     onConnect(): void;
 
     initGame(isRobot?: boolean): void;
 
-    onGameStarted(opponent: IOpponent, mySide: Side, roomId: string): void;
+    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
 
     onMove(movement: Move): void;
 
-    onOpponentMove(movement: Move): void;
+    onOpponentMove(moveState: IMoveState): void;
 
     searchOpponent(): void;
 
@@ -47,7 +67,11 @@ export interface IGameStore {
 
     onShareClick(): void;
 
-    onGameOver(): void;
+    onMyTimeChange(): void;
+
+    onOpponentTimeChange(): void;
+
+    onGameOver(winner: SideType, reason: GameOverReasonType): void;
 
     onOpponentDisconnected(): void;
 

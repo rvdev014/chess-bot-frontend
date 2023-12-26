@@ -3,11 +3,14 @@ import {IGuestGameStore} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {Chess} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
+import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
+import {lcFirst} from "../../utils.ts";
 
 const initialStore = {
     chess: new Chess(),
     engine: new Engine(),
     gamePosition: undefined,
+    currentTurn: null,
     isLoading: false,
     isGameFound: false,
     isGameOver: false,
@@ -33,11 +36,19 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
                 if (game.lastFen) {
                     newChess.load(game.lastFen);
                 }
+
+                console.log('game', game)
+
                 set({
                     chess: newChess,
                     engine: new Engine(),
                     gamePosition: newChess.fen(),
                     isGameFound: true,
+
+                    whiteTimeLeft: game.white.timeLeft,
+                    blackTimeLeft: game.black.timeLeft,
+                    currentTurn: game.currentTurn,
+
                     roomId: game.roomId,
                 });
             } else {
@@ -49,16 +60,41 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
             }
         },
 
-        onMove(movement) {
-            get().chess.move(movement);
-            set({gamePosition: get().chess.fen()})
+        onMove(moveState) {
+            const chess = get().chess;
+            chess.move(moveState.movement);
+            const currentTurn = chess.turn() === 'w' ? 'white' : 'black';
+
+            set({
+                currentTurn,
+                gamePosition: chess.fen(),
+                whiteTimeLeft: moveState.whiteTimeLeft,
+                blackTimeLeft: moveState.blackTimeLeft,
+            })
         },
 
-        onGameOver() {
-            const winner = get().chess.turn() === 'w' ? 'Black' : 'White';
+        onTimeChange(side) {
+            if (side === 'white') {
+                set({whiteTimeLeft: get().whiteTimeLeft - 1})
+            } else {
+                set({blackTimeLeft: get().blackTimeLeft - 1})
+            }
+        },
+
+        onGameOver(winner, reason) {
             set({
                 isGameOver: true,
-                gameOverReason: `Checkmate! ${winner} wins!`,
+                gameOverReason: `${lcFirst(winner)} won! ${gameOverLabels[reason]}`,
+            })
+        },
+
+        onGameOverEvent(gameState) {
+            console.log('gameState', gameState)
+            set({
+                isGameOver: true,
+                gameOverReason: `${lcFirst(gameState.winner)} won! ${gameState.reason ? gameOverLabels[gameState.reason] : ''}`,
+                whiteTimeLeft: gameState.white.timeLeft,
+                blackTimeLeft: gameState.black.timeLeft,
             })
         },
 

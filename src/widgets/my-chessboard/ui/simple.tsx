@@ -4,6 +4,7 @@ import React, {FC, useEffect} from "react";
 import styles from './style.module.scss'
 import {Chess} from "chess.ts";
 import {BoardPosition} from "react-chessboard/dist/chessboard/types";
+import {GameOverReasonType, SideType} from "../../../shared/model/game/store-types.ts";
 
 interface IProps extends React.ComponentProps<typeof Chessboard> {
     chess: Chess;
@@ -11,7 +12,7 @@ interface IProps extends React.ComponentProps<typeof Chessboard> {
     isGameOver: boolean;
     gameOverReason: string | null;
 
-    onGameOver(): void;
+    onGameOver(winner: SideType, reason: GameOverReasonType): void;
 }
 
 export const MyChessboardSimple: FC<IProps> = (
@@ -20,7 +21,10 @@ export const MyChessboardSimple: FC<IProps> = (
 
     useEffect(() => {
         if (chess.gameOver() || chess.inDraw()) {
-            props.onGameOver();
+            props.onGameOver(
+                chess.turn() === 'w' ? 'black' : 'white',
+                chess.inDraw() ? 'draw' : 'checkmate'
+            );
             return;
         }
     }, [gamePosition])
