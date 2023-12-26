@@ -9,7 +9,7 @@ export class Engine {
     }
 
     constructor() {
-        this.stockFish = new Worker("/public/stockfish.js");
+        this.stockFish = new Worker("/stockfish.js");
         this.onMessage = (callback) => {
             this.stockFish.addEventListener("message", (e) => {
                 const bestMove = e.data?.match(/bestmove\s+(\S+)/)?.[1];
