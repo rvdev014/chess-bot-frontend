@@ -6,7 +6,7 @@ import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
 import {lcFirst} from "../../utils.ts";
 
-const defaultTimeLimit = 10;
+const defaultTimeLimit = 60 * 15;
 
 const initialStore = {
     chess: new Chess(),
