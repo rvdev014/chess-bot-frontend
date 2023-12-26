@@ -27,15 +27,19 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         initGame(isRobot = false) {
-            const initialFen = null;
+            // const initialFen = null;
             const newChess = new Chess();
             set({
                 chess: newChess,
                 engine: new Engine(),
                 gamePosition: newChess.fen(),
+                isRobot
             })
 
             if (isRobot) {
+
+                set({mySide: 'w', isMyTurn: true});
+
                 get().engine.onMessage(({bestMove}) => {
                     if (bestMove) {
                         setTimeout(() => {
@@ -44,17 +48,29 @@ export const useGameStore = create<IGameStore>((set, get) => {
                                 to: bestMove.substring(2, 4),
                                 promotion: bestMove.substring(4, 5) as PieceSymbol,
                             });
-                            set({gamePosition: get().chess.fen()});
+                            set({
+                                isMyTurn: true,
+                                gamePosition: get().chess.fen()
+                            });
                         }, 500)
                     }
                 });
             }
         },
 
-        async searchOpponent(userId: string) {
+        searchOpponent() {
             try {
                 set({isSearching: true});
                 socket.emit('game:search', userId);
+            } catch (e) {
+                console.log(e)
+            }
+        },
+
+        cancelSearch() {
+            try {
+                set({isSearching: false});
+                socket.emit('game:search-cancel');
             } catch (e) {
                 console.log(e)
             }
@@ -64,7 +80,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
             set({
                 isSearching: false,
                 opponent,
-                isMySide: mySide,
+                mySide: mySide,
                 isMyTurn: mySide === 'w',
                 roomId,
             });
@@ -76,7 +92,10 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 isMyTurn: false,
                 gamePosition: gameFen,
             })
-            socket.emit('game:move', movement, gameFen);
+
+            if (!get().isRobot) {
+                socket.emit('game:move', movement, gameFen);
+            }
         },
 
         onOpponentMove(movement) {

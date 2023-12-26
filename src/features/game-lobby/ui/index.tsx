@@ -7,6 +7,8 @@ import {MyChessboardClickable} from "../../../widgets/my-chessboard";
 export const GameLobby = () => {
     const onShareClick = useGameStore(state => state.onShareClick);
 
+
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.header}>

@@ -12,6 +12,10 @@ export type Side = 'w' | 'b';
 
 export interface IGameStore {
     isSearching: boolean;
+    isRobot: boolean;
+    isMyTurn: boolean;
+    isGameOver: boolean;
+    isViewMode: boolean;
 
     chess: Chess;
     engine: Engine;
@@ -20,15 +24,12 @@ export interface IGameStore {
     opponent: IOpponent | null;
     roomId: string | null;
 
-    isMySide: Side;
-    isMyTurn: boolean;
-    isGameOver: boolean;
-    isViewMode: boolean;
+    mySide: Side;
     gameOverReason: string | null;
 
     onConnect(): void;
 
-    initGame(isRobot: boolean): void;
+    initGame(isRobot?: boolean): void;
 
     onGameStarted(opponent: IOpponent, mySide: Side, roomId: string): void;
 
@@ -36,7 +37,9 @@ export interface IGameStore {
 
     onOpponentMove(movement: Move): void;
 
-    searchOpponent(userId: string): void;
+    searchOpponent(): void;
+
+    cancelSearch(): void;
 
     onDisconnect(): void;
 

@@ -13,11 +13,11 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
     const engine = useGameStore(state => state.engine);
     const gamePosition = useGameStore(state => state.gamePosition);
 
+    const mySide = useGameStore(state => state.mySide);
     const isMyTurn = useGameStore(state => state.isMyTurn);
-    const isMySide = useGameStore(state => state.isMySide);
     const isGameOver = useGameStore(state => state.isGameOver);
-    const isViewMode = useGameStore(state => state.isViewMode);
     const gameOverReason = useGameStore(state => state.gameOverReason);
+    const isViewMode = useGameStore(state => state.isViewMode);
     const onViewMode = useGameStore(state => state.onViewMode);
 
     const initGame = useGameStore(state => state.initGame);
@@ -31,27 +31,26 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         showPromotionDialog,
         onSquareClick,
         onPromotionPieceSelect
-    } = useClickableBoard(chess, isMySide, onMove);
+    } = useClickableBoard(chess, mySide, onMove);
 
     useEffect(() => {
         initGame(isRobot);
         return () => resetGame();
     }, []);
 
-    console.log('MyChessboardClickable')
-
     return (
         <MyChessboard
+            isRobot={isRobot}
             type={'clickable'}
             chess={chess}
             engine={engine}
             gamePosition={gamePosition}
+            mySide={mySide}
             isMyTurn={isMyTurn}
-            isMySide={isMySide}
             isGameOver={isGameOver}
+            gameOverReason={gameOverReason}
             isViewMode={isViewMode}
             onViewMode={onViewMode}
-            gameOverReason={gameOverReason}
             onGameOver={onGameOver}
             onSquareClick={onSquareClick}
             onPromotionPieceSelect={onPromotionPieceSelect}

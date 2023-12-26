@@ -1,0 +1,1 @@
+export {RobotPage} from './ui';

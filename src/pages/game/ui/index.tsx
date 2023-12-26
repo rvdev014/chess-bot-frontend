@@ -66,7 +66,7 @@ export const GamePage = () => {
 
     return (
         <div>
-            <h1>Guest page</h1>
+            <h1 className='title'>Guest page</h1>
             {renderContent()}
         </div>
     );

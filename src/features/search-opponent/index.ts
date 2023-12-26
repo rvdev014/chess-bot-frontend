@@ -1,1 +1,0 @@
-export {SearchOpponent} from './ui';

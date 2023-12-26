@@ -13,8 +13,8 @@ export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
     const engine = useGameStore(state => state.engine);
     const gamePosition = useGameStore(state => state.gamePosition);
 
+    const mySide = useGameStore(state => state.mySide);
     const isMyTurn = useGameStore(state => state.isMyTurn);
-    const isMySide = useGameStore(state => state.isMySide);
     const isGameOver = useGameStore(state => state.isGameOver);
     const gameOverReason = useGameStore(state => state.gameOverReason);
     const isViewMode = useGameStore(state => state.isViewMode);
@@ -32,7 +32,7 @@ export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
 
     function onPieceDrop(sourceSquare: Square, targetSquare: Square): boolean {
         // compare isMySide
-        if (isMySide && chess.turn() !== isMySide) return false;
+        if (mySide && chess.turn() !== mySide) return false;
 
         const move = chess.move({
             from: sourceSquare,
@@ -52,12 +52,13 @@ export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
 
     return (
         <MyChessboard
+            isRobot={isRobot}
             type={'draggable'}
             chess={chess}
             engine={engine}
             gamePosition={gamePosition}
+            mySide={mySide}
             isMyTurn={isMyTurn}
-            isMySide={isMySide}
             isGameOver={isGameOver}
             gameOverReason={gameOverReason}
             isViewMode={isViewMode}

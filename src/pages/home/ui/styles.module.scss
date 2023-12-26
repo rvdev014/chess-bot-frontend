@@ -3,11 +3,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
 }
 
-.title {
-  font-size: 36px;
-  line-height: 36px;
+.searchWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 300px;
+  margin: 0 auto;
+}
+
+.loader {
+  text-align: center;
+  font-size: 18px;
+  margin: 15px 0;
+}
+
+.btn {
+  margin-bottom: 5px;
 }

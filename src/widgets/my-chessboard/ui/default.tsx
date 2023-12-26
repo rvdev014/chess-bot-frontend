@@ -15,7 +15,7 @@ interface IProps extends React.ComponentProps<typeof Chessboard> {
     chess: Chess;
     engine: Engine;
     gamePosition: string | BoardPosition | undefined;
-    isMySide: Side;
+    mySide?: Side;
     isMyTurn: boolean;
     isGameOver: boolean;
     gameOverReason: string | null;
@@ -34,8 +34,10 @@ export const MyChessboard: FC<IProps> = (
             props.onGameOver();
             return;
         }
-
-        if (chess.turn() !== props.isMySide && props.isRobot) {
+        console.log('chess.turn()', chess.turn())
+        console.log('props.mySide', props.mySide)
+        console.log('props.isRobot', props.isRobot)
+        if (chess.turn() !== props.mySide && props.isRobot) {
             findBestMove();
         }
     }, [gamePosition])
@@ -61,7 +63,7 @@ export const MyChessboard: FC<IProps> = (
                 arePiecesDraggable={type === 'draggable'}
                 position={gamePosition}
                 animationDuration={300}
-                boardOrientation={props.isMySide === "w" ? 'white' : 'black'}
+                boardOrientation={props.mySide === 'w' ? 'white' : 'black'}
                 {...props}
             />
         </div>
