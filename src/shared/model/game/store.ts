@@ -1,19 +1,20 @@
 import {create} from "zustand";
-import {IGameOverState, IGameStore, IMoveState} from "./store-types.ts";
+import {IGameOptions, IGameOverState, IGameStore, IMoveState} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {Chess, PieceSymbol} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
 import {lcFirst} from "../../utils.ts";
+import {useLobbyStore} from "../lobby/store.ts";
 
 const defaultTimeLimit = 60 * 15;
+const defaultRobotLevel = 1;
 
 const initialStore = {
     chess: new Chess(),
     engine: new Engine(),
     gamePosition: undefined,
     opponent: null,
-    isSearching: false,
     isGameOver: false,
     isViewMode: false,
     gameOverReason: null,
@@ -21,9 +22,6 @@ const initialStore = {
     myTimeLeft: defaultTimeLimit,
     opponentTimeLeft: defaultTimeLimit,
 } as IGameStore;
-
-const params = new URLSearchParams(window.location.search);
-const userId = params.get('id');
 
 export const useGameStore = create<IGameStore>((set, get) => {
     return {
@@ -35,11 +33,21 @@ export const useGameStore = create<IGameStore>((set, get) => {
 
         initGame(isRobot = false) {
             const newChess = new Chess();
+            const gameOptions: IGameOptions = JSON.parse(localStorage.getItem('gameOptions') || '{}');
+            const timeLimit = gameOptions.timeLimit ? gameOptions.timeLimit * 60 : defaultTimeLimit;
+
             set({
                 chess: newChess,
                 engine: new Engine(),
                 gamePosition: newChess.fen(),
-                isRobot
+                isRobot,
+                timeLimit,
+                myTimeLeft: timeLimit,
+                opponentTimeLeft: timeLimit,
+                robotLevel: gameOptions.robotLevel || defaultRobotLevel,
+                isViewMode: false,
+                isGameOver: false,
+                gameOverReason: null,
             })
 
             if (isRobot) {
@@ -62,22 +70,12 @@ export const useGameStore = create<IGameStore>((set, get) => {
             }
         },
 
-        searchOpponent() {
-            set({isSearching: true});
-            socket.emit('game:search', userId);
-        },
-
-        cancelSearch() {
-            set({isSearching: false});
-            socket.emit('game:search-cancel');
-        },
-
         onGameStarted(opponent, mySide, roomId) {
+            useLobbyStore.getState().onCancelSearch();
             set({
-                isSearching: false,
-                opponent,
                 mySide,
                 roomId,
+                opponent,
                 isMyTurn: mySide === 'white',
             });
         },
@@ -104,6 +102,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         onOpponentMove(moveState) {
+            console.log('Opponent move')
             get().chess.move(moveState.movement);
             set({
                 isMyTurn: true,
@@ -117,9 +116,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 get().onGameOver(get().mySide === 'white' ? 'black' : 'white', 'timeout')
                 return;
             }
-            set({
-                myTimeLeft: currentTimeLeft - 1,
-            });
+            set({myTimeLeft: currentTimeLeft - 1});
         },
 
         onOpponentTimeChange() {
@@ -128,9 +125,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 get().onGameOver(get().mySide === 'white' ? 'white' : 'black', 'timeout')
                 return;
             }
-            set({
-                opponentTimeLeft: currentTimeLeft - 1,
-            });
+            set({opponentTimeLeft: currentTimeLeft - 1});
         },
 
         onGameOver(winner, reason) {
@@ -155,7 +150,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
 
         onShareClick() {
             const roomId = get().roomId;
-            const url = `http://localhost:5173/game/${roomId}`;
+            const url = `http://localhost:5173/guest/${roomId}`;
             navigator.clipboard.writeText(url).then(() => {
                 alert('Copied to clipboard');
             });

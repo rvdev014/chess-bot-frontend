@@ -3,21 +3,35 @@ import {useParams} from "react-router-dom";
 import {socket} from "../../../shared/api/socket.ts";
 import {useGuestGameStore} from "../../../shared/model/guest-game/store.ts";
 import {GuestGamePanel} from "../../../features/game-panel";
+import {shallow} from "zustand/shallow";
+import {ModalLoader} from "../../../shared/ui/loader/modal-loader.tsx";
 
 export const GuestGamePage = () => {
     const roomId = useParams().room;
 
-    const isLoading = useGuestGameStore(state => state.isLoading);
-    const isGameFound = useGuestGameStore(state => state.isGameFound);
-
-    const initGuestGame = useGuestGameStore(state => state.initGuestGame);
-    const resetGuestGame = useGuestGameStore(state => state.resetGuestGame);
-    const onConnect = useGuestGameStore(state => state.onConnect);
-    const onJoinGuest = useGuestGameStore(state => state.onJoinGuest);
-    const onDisconnect = useGuestGameStore(state => state.onDisconnect);
-    const onMove = useGuestGameStore(state => state.onMove);
-    const onOpponentDisconnected = useGuestGameStore(state => state.onOpponentDisconnected);
-    const onGameOverEvent = useGuestGameStore(state => state.onGameOverEvent);
+    const [
+        isLoading,
+        isGameFound,
+        initGuestGame,
+        resetGuestGame,
+        onConnect,
+        onJoinGuest,
+        onDisconnect,
+        onMove,
+        onOpponentDisconnected,
+        onGameOverEvent,
+    ] = useGuestGameStore(state => [
+        state.isLoading,
+        state.isGameFound,
+        state.initGuestGame,
+        state.resetGuestGame,
+        state.onConnect,
+        state.onJoinGuest,
+        state.onDisconnect,
+        state.onMove,
+        state.onOpponentDisconnected,
+        state.onGameOverEvent,
+    ], shallow);
 
     useEffect(() => {
         if (roomId) {
@@ -42,23 +56,15 @@ export const GuestGamePage = () => {
         };
     }, []);
 
-    function renderContent() {
-        switch (true) {
-            case isLoading:
-                return <div>Loading...</div>;
-            case !isGameFound:
-                return <div>Room id is invalid!</div>;
-            default:
-                return (
-                    <GuestGamePanel/>
-                );
-        }
-    }
-
     return (
         <div>
             <h1 className='title'>Guest page</h1>
-            {renderContent()}
+            {isGameFound ?
+                <>
+                    <GuestGamePanel/>
+                    <ModalLoader opened={isLoading}/>
+                </> :
+                <div>Room id is invalid!</div>}
         </div>
     );
 };

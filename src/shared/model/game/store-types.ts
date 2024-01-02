@@ -12,6 +12,11 @@ export interface IOpponent {
 export type SideType = 'white' | 'black';
 export type GameOverReasonType = 'checkmate' | 'timeout' | 'resign' | 'draw' | 'disconnect';
 
+export interface IGameOptions {
+    timeLimit?: number;
+    robotLevel?: number;
+}
+
 export interface IMoveState {
     movement: any;
     lastFen: string;
@@ -28,7 +33,6 @@ export interface IGameOverState {
 }
 
 export interface IGameStore {
-    isSearching: boolean;
     isRobot: boolean;
     isMyTurn: boolean;
     isGameOver: boolean;
@@ -37,43 +41,37 @@ export interface IGameStore {
     chess: Chess;
     engine: Engine;
     gamePosition: string | BoardPosition | undefined;
+    roomId: string | null;
+    timeLimit: number;
+    robotLevel: number;
 
     opponent: IOpponent | null;
-    roomId: string | null;
-
-    timeLimit: number;
-    myTimeLeft: number;
     opponentTimeLeft: number;
-    mySide: SideType;
-    gameOverReason: string | null;
-
-    onConnect(): void;
-
-    initGame(isRobot?: boolean): void;
-
-    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
-
-    onMove(movement: Move): void;
 
     onOpponentMove(moveState: IMoveState): void;
 
-    searchOpponent(): void;
+    onOpponentTimeChange(): void;
 
-    cancelSearch(): void;
+    onOpponentDisconnected(): void;
 
-    onDisconnect(): void;
+    mySide: SideType;
+    myTimeLeft: number;
+
+    onMove(movement: Move): void;
+
+    onMyTimeChange(): void;
+
+    onGameOver(winner: SideType, reason: GameOverReasonType): void;
+
+    gameOverReason: string | null;
+
+    initGame(isRobot: boolean): void;
+
+    resetGame(): void;
+
+    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
 
     onViewMode(): void;
 
     onShareClick(): void;
-
-    onMyTimeChange(): void;
-
-    onOpponentTimeChange(): void;
-
-    onGameOver(winner: SideType, reason: GameOverReasonType): void;
-
-    onOpponentDisconnected(): void;
-
-    resetGame(): void;
 }

@@ -1,0 +1,16 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  position: fixed;
+  top: 0;
+}
+
+.mainBtn {
+  margin-right: 7px;
+}
+
+.mainIcon {
+  font-size: 30px;
+}

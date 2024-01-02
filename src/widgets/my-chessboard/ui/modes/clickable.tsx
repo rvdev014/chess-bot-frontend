@@ -14,6 +14,7 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
     const gamePosition = useGameStore(state => state.gamePosition);
 
     const mySide = useGameStore(state => state.mySide);
+    const robotLevel = useGameStore(state => state.robotLevel);
     const isMyTurn = useGameStore(state => state.isMyTurn);
     const isGameOver = useGameStore(state => state.isGameOver);
     const gameOverReason = useGameStore(state => state.gameOverReason);
@@ -31,7 +32,7 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         showPromotionDialog,
         onSquareClick,
         onPromotionPieceSelect
-    } = useClickableBoard(chess, mySide, onMove);
+    } = useClickableBoard(chess, mySide, onMove, isGameOver);
 
     useEffect(() => {
         initGame(isRobot);
@@ -41,6 +42,7 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
     return (
         <MyChessboard
             isRobot={isRobot}
+            level={robotLevel}
             type={'clickable'}
             chess={chess}
             engine={engine}

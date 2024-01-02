@@ -24,8 +24,8 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
         onConnect() {
             console.log('Connected')
         },
-
         initGuestGame(roomId) {
+            set({isLoading: true})
             socket.emit('game:join-guest', roomId)
         },
 
@@ -44,6 +44,7 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
                     engine: new Engine(),
                     gamePosition: newChess.fen(),
                     isGameFound: true,
+                    isLoading: false,
 
                     whiteTimeLeft: game.white.timeLeft,
                     blackTimeLeft: game.black.timeLeft,

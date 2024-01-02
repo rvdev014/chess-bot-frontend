@@ -1,0 +1,25 @@
+@import "src/assets/scss/variables";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.btn {
+  margin-bottom: 1rem;
+}
+
+.loaderWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.loader {
+  margin-bottom: 1rem;
+}

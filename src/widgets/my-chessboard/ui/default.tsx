@@ -38,8 +38,8 @@ export const MyChessboard: FC<IProps> = (
             );
             return;
         }
-        const chessTurnFull = chess.turn() === 'w' ? 'white' : 'black';
-        if (chessTurnFull !== props.mySide && props.isRobot) {
+        const chessTurn = chess.turn() === 'w' ? 'white' : 'black';
+        if (chessTurn !== props.mySide && props.isRobot) {
             findBestMove();
         }
     }, [gamePosition])
@@ -62,7 +62,7 @@ export const MyChessboard: FC<IProps> = (
             {(!props.isMyTurn && !props.isGameOver) && <div className={`${styles.overlay} ${styles.turnOverlay}`}/>}
             <Chessboard
                 id="BasicBoard"
-                arePiecesDraggable={type === 'draggable'}
+                arePiecesDraggable={(type === 'draggable' && !props.isGameOver)}
                 position={gamePosition}
                 animationDuration={300}
                 boardOrientation={props.mySide}

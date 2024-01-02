@@ -3,18 +3,16 @@ import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {BoardPosition} from "react-chessboard/dist/chessboard/types";
 import {GameOverReasonType, IMoveState, SideType} from "../game/store-types.ts";
 
+export interface IPlayerState {
+    userId: string;
+    socketId: string;
+    timeLeft: number;
+}
+
 export interface IGameState {
     roomId: string;
-    white: {
-        userId: string;
-        socketId: string;
-        timeLeft: number;
-    };
-    black: {
-        userId: string;
-        socketId: string;
-        timeLeft: number;
-    };
+    white: IPlayerState;
+    black: IPlayerState;
     currentTurn: SideType | null;
     lastFen: string | null;
     winner?: SideType | null;
@@ -25,8 +23,8 @@ export interface IGuestGameStore {
     chess: Chess;
     engine: Engine;
     gamePosition: string | BoardPosition | undefined;
-    currentTurn: SideType | null;
     roomId: string | null;
+    currentTurn: SideType | null;
     whiteTimeLeft: number;
     blackTimeLeft: number;
 
