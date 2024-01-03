@@ -1,1 +1,1 @@
-export {GuestGamePage} from './ui';
+export {FriendGamePage} from './ui';

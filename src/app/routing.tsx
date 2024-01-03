@@ -3,10 +3,10 @@ import {Route, Routes} from "react-router-dom";
 import {RobotPage} from "../pages/robot";
 import {HomeLobby} from "../pages/home";
 import {GuestGamePage} from "../pages/guest";
+import {FriendGamePage} from "../pages/friend";
 import {CustomRouter} from "./router/custom-router.tsx";
-import {history} from "./router/router-history.ts";
-import {FriendGamePage} from "../pages/friend/ui";
 import {MainLayout} from "../widgets/main-layout";
+import {history} from "./router/router-history.ts";
 
 const Routing = () => {
     return (
