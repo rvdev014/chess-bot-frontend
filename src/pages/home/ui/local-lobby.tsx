@@ -21,10 +21,10 @@ export const LocalLobby = () => {
 
             <div className={styles.lobbyWrapper}>
                 <h1 className='title'>Choose game mode</h1>
-                <Button size={'md'} className={styles.btn} onClick={onPlayWithFriend}>
+                <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayWithFriend}>
                     Play with friend
                 </Button>
-                <Button size={'md'} className={styles.btn} onClick={onPlayWithRobot}>
+                <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayWithRobot}>
                     Play with robot
                 </Button>
             </div>

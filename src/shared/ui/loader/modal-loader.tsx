@@ -27,7 +27,7 @@ export const ModalLoader: FC<IProps> = ({title, opened, onCancel}) => {
         >
             <div className={styles.loaderWrapper}>
                 <Loader size='lg' className={styles.loader}/>
-                {onCancel && <Button onClick={onCancel}>Отмена</Button>}
+                {onCancel && <Button color='#b58863' onClick={onCancel}>Отмена</Button>}
             </div>
         </Modal>
     );

@@ -67,7 +67,7 @@ export const GameOptionsModal: FC = () => {
                     onChange={item => onChangeField('level', item.value)}
                 />
 
-                <Button size='md' type='submit'>Играть</Button>
+                <Button color='#b58863' size='md' type='submit'>Играть</Button>
             </form>
         </Modal>
     );

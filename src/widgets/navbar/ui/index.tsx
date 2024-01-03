@@ -67,6 +67,7 @@ export const Navbar = () => {
                             size={'md'}
                             className={styles.mainBtn}
                             onClick={onHomeClick}
+                            color='#b58863'
                         >
                             <IoHome className={styles.mainIcon}/>
                         </Button>}
@@ -79,6 +80,7 @@ export const Navbar = () => {
                             size={'md'}
                             className={styles.mainBtn}
                             onClick={onShareClick}
+                            color='#b58863'
                         >
                             <IoMdShare className={styles.mainIcon}/>
                         </Button>}
@@ -87,6 +89,7 @@ export const Navbar = () => {
                         size={'md'}
                         className={styles.mainBtn}
                         onClick={onInfoClick}
+                        color='#b58863'
                     >
                         <MdInfoOutline className={styles.mainIcon}/>
                     </Button>
@@ -95,6 +98,7 @@ export const Navbar = () => {
                         size={'md'}
                         className={styles.mainBtn}
                         onClick={onFullscreenClick}
+                        color='#b58863'
                     >
                         {isFullscreen
                             ? <AiOutlineFullscreenExit className={styles.mainIcon}/>

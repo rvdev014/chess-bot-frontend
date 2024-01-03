@@ -25,6 +25,7 @@ export const RadioButtonGroup: FC<IProps> = ({data, label, value, onChange}) => 
                         className={styles.button}
                         variant={value === item.value ? '' : 'light'}
                         onClick={() => onChange(item)}
+                        color='#b58863'
                     >
                         {item.label}
                     </Button>

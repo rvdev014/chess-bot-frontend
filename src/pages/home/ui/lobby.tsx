@@ -74,10 +74,10 @@ export const HomeLobby = () => {
                     <>
                         <div className={styles.lobbyWrapper}>
                             <h1 className='title'>Let's Chess!</h1>
-                            <Button size={'md'} className={styles.btn} onClick={onPlayLocal}>
+                            <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayLocal}>
                                 Play local
                             </Button>
-                            <Button size={'md'} className={styles.btn} onClick={onSearchOpponent}>
+                            <Button color='#b58863' size={'md'} className={styles.btn} onClick={onSearchOpponent}>
                                 Play online
                             </Button>
                         </div>

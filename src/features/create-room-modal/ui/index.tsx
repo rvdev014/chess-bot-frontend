@@ -81,7 +81,7 @@ export const CreateRoomModal: FC = () => {
                     onChange={value => onChangeField('friend', value)}
                 />
 
-                <Button size='md' type='submit'>Пригласить друга</Button>
+                <Button color='#b58863' size='md' type='submit'>Пригласить друга</Button>
             </form>
         </Modal>
     );
