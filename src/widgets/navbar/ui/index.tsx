@@ -1,19 +1,50 @@
-import React, {FC} from 'react';
+import React from 'react';
 import styles from './styles.module.scss';
-import {Button} from "@mantine/core";
+import {Button, Modal} from "@mantine/core";
 import {IoHome} from "react-icons/io5";
-import {NavbarButtonsType} from "../../../shared/model/app-store-types.ts";
 import {AiOutlineFullscreen, AiOutlineFullscreenExit} from "react-icons/ai";
+import {MdInfoOutline} from "react-icons/md";
+import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
+import {useGameStore} from "../../../shared/model/game/store.ts";
+import {shallow} from "zustand/shallow";
+import {IoMdShare} from "react-icons/io";
 
-interface IProps {
-    buttons: NavbarButtonsType[]
-}
+export const Navbar = () => {
 
-export const Navbar: FC<IProps> = ({buttons}) => {
+    const [
+        isPlayingLocal,
+        onHomeClick
+    ] = useLobbyStore(state => [
+        state.isPlayingLocal,
+        state.onHomeClick
+    ], shallow);
 
+    const [
+        isGameStarted,
+        opponent,
+        onShareClick
+    ] = useGameStore(state => [
+        state.isGameStarted,
+        state.opponent,
+        state.onShareClick
+    ], shallow);
+
+    const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
     const [isFullscreen, setIsFullscreen] = React.useState(false);
 
-    const onFullscreenChange = () => {
+    function getIsHome() {
+        return isPlayingLocal || isGameStarted;
+    }
+
+    function onInfoClick() {
+        setIsInfoModalOpen(true);
+    }
+
+    function onInfoModalClose() {
+        setIsInfoModalOpen(false);
+    }
+
+    function onFullscreenClick() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
             setIsFullscreen(true);
@@ -23,26 +54,71 @@ export const Navbar: FC<IProps> = ({buttons}) => {
         }
     }
 
-    return (
-        <div className={styles.header}>
-            {buttons.includes('home') &&
-                <Button
-                    size={'md'}
-                    className={styles.mainBtn}
-                >
-                    <IoHome className={styles.mainIcon}/>
-                </Button>}
+    function getIsShare() {
+        return !!opponent;
+    }
 
-            {buttons.includes('fullscreen') &&
-                <Button
+    return (
+        <>
+            <div className={styles.header}>
+                <div>
+                    {getIsHome() &&
+                        <Button
+                            size={'md'}
+                            className={styles.mainBtn}
+                            onClick={onHomeClick}
+                        >
+                            <IoHome className={styles.mainIcon}/>
+                        </Button>}
+                </div>
+
+                <div>
+
+                    {getIsShare() &&
+                        <Button
+                            size={'md'}
+                            className={styles.mainBtn}
+                            onClick={onShareClick}
+                        >
+                            <IoMdShare className={styles.mainIcon}/>
+                        </Button>}
+
+                    <Button
+                        size={'md'}
+                        className={styles.mainBtn}
+                        onClick={onInfoClick}
+                    >
+                        <MdInfoOutline className={styles.mainIcon}/>
+                    </Button>
+
+                    <Button
+                        size={'md'}
+                        className={styles.mainBtn}
+                        onClick={onFullscreenClick}
+                    >
+                        {isFullscreen
+                            ? <AiOutlineFullscreenExit className={styles.mainIcon}/>
+                            : <AiOutlineFullscreen className={styles.mainIcon}/>}
+                    </Button>
+                </div>
+            </div>
+
+            {isInfoModalOpen &&
+                <Modal
+                    opened={isInfoModalOpen}
+                    onClose={onInfoModalClose}
+                    title={'About Let\'s Chess'}
                     size={'md'}
-                    className={styles.mainBtn}
-                    onClick={onFullscreenChange}
+                    overlayProps={{
+                        backgroundOpacity: 0.55,
+                        blur: 3,
+                    }}
+                    closeOnClickOutside={false}
                 >
-                    {isFullscreen
-                        ? <AiOutlineFullscreenExit className={styles.mainIcon}/>
-                        : <AiOutlineFullscreen className={styles.mainIcon}/>}
-                </Button>}
-        </div>
+                    <div className={styles.infoModal}>
+                        <p>Developed by <a target='_blank' href="https://t.me/morris_admin">Morris</a></p>
+                    </div>
+                </Modal>}
+        </>
     );
 };

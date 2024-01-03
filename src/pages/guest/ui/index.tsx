@@ -57,14 +57,13 @@ export const GuestGamePage = () => {
     }, []);
 
     return (
-        <div>
-            <h1 className='title'>Guest page</h1>
+        <>
             {isGameFound ?
                 <>
                     <GuestGamePanel/>
                     <ModalLoader opened={isLoading}/>
                 </> :
                 <div>Room id is invalid!</div>}
-        </div>
+        </>
     );
 };

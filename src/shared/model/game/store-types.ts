@@ -33,6 +33,7 @@ export interface IGameOverState {
 }
 
 export interface IGameStore {
+    isGameStarted: boolean;
     isRobot: boolean;
     isMyTurn: boolean;
     isGameOver: boolean;
@@ -68,6 +69,8 @@ export interface IGameStore {
     initGame(isRobot: boolean): void;
 
     resetGame(): void;
+
+    reset(): void;
 
     onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
 

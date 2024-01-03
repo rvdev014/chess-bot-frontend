@@ -11,6 +11,7 @@ const defaultTimeLimit = 60 * 15;
 const defaultRobotLevel = 1;
 
 const initialStore = {
+    isGameStarted: false,
     chess: new Chess(),
     engine: new Engine(),
     gamePosition: undefined,
@@ -37,6 +38,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
             const timeLimit = gameOptions.timeLimit ? gameOptions.timeLimit * 60 : defaultTimeLimit;
 
             set({
+                isGameStarted: true,
                 chess: newChess,
                 engine: new Engine(),
                 gamePosition: newChess.fen(),
@@ -171,7 +173,13 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 chess: newChess,
                 engine: new Engine(),
                 gamePosition: newChess.fen(),
+                isGameStarted: false,
             });
+        },
+
+        reset() {
+            get().engine.stop();
+            set(initialStore);
         },
 
         onDisconnect() {

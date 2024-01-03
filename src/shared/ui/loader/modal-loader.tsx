@@ -12,7 +12,8 @@ export const ModalLoader: FC<IProps> = ({title, opened, onCancel}) => {
     return (
         <Modal
             opened={opened}
-            onClose={onCancel}
+            onClose={onCancel || (() => {
+            })}
             withCloseButton={false}
             size='xs'
             title={title || 'Загрузка...'}

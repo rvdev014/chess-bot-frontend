@@ -3,22 +3,43 @@ import {ILobbyStore} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {IGameOptions} from "../game/store-types.ts";
 import {history} from "../../../app/router/router-history.ts";
+import {useGameStore} from "../game/store.ts";
 
 const initialStore = {
+    isWaitingFriend: false,
+    isFriendFound: false,
     isSearching: false,
     isCreateRoomModal: false,
+    isGameOptionsModal: false,
+    isPlayingLocal: false,
 } as ILobbyStore;
 
 export const useLobbyStore = create<ILobbyStore>((set, get) => {
     return {
         ...initialStore,
+
+        onHomeClick() {
+            if (useGameStore.getState().isGameStarted) {
+                if (confirm('Are you sure you want to leave the game?')) {
+                    socket.emit('game:leave');
+                    get().reset();
+                    useGameStore.getState().reset();
+                    history.push('/');
+                }
+            } else {
+                get().reset();
+            }
+        },
+
         onSearchOpponent() {
             set({isSearching: true});
             socket.emit('game:search');
         },
+
         onPlayLocal() {
             set({isPlayingLocal: true});
         },
+
         onSubmitCreateRoomForm(fields) {
             set({
                 isCreateRoomModal: false,
@@ -26,6 +47,7 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
             })
             socket.emit('game:create-room', fields);
         },
+
         onSubmitGameOptionsForm(fields) {
             const gameOptions: IGameOptions = {
                 timeLimit: fields.time,
@@ -34,13 +56,16 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
             localStorage.setItem('gameOptions', JSON.stringify(gameOptions));
             history.push('/robot');
         },
+
         onCancelSearch() {
             set({isSearching: false});
             socket.emit('game:search-cancel');
         },
+
         onConnect() {
             console.log('Connected')
         },
+
         onDisconnect() {
             console.log('Disconnected')
         },
@@ -50,6 +75,7 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
         },
 
         onCancelWaitingFriend() {
+            socket.emit('game:create-room-cancel');
             set({isWaitingFriend: false});
         },
 
@@ -65,6 +91,8 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
             set({isGameOptionsModal: false});
         },
 
-
+        reset() {
+            set(initialStore);
+        }
     }
 })

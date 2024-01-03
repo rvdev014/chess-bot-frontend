@@ -37,6 +37,7 @@ export const CreateRoomModal: FC = () => {
     if (isWaitingFriend) {
         return (
             <ModalLoader
+                title={'Ожидаем друга...'}
                 opened={isWaitingFriend}
                 onCancel={onCancelWaitingFriend}
             />

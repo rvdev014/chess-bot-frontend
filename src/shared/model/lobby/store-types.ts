@@ -16,6 +16,8 @@ export interface ILobbyStore {
     isGameOptionsModal: boolean;
     isPlayingLocal: boolean;
 
+    onHomeClick(): void;
+
     onConnect(): void;
 
     onSearchOpponent(): void;
@@ -39,4 +41,6 @@ export interface ILobbyStore {
     onPlayWithRobot(): void;
 
     onDisconnect(): void;
+
+    reset(): void;
 }

@@ -1,4 +1,4 @@
-export type NavbarButtonsType = 'home' | 'fullscreen' | 'settings' | 'exit';
+export type NavbarButtonsType = 'home' | 'info' | 'settings' | 'exit';
 
 export interface IAppStore {
     navbarButtons: NavbarButtonsType[];
