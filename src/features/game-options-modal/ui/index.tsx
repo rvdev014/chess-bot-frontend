@@ -5,6 +5,7 @@ import {RadioButtonGroup} from "../../../shared/ui/radio-button-group";
 import {IGameOptionsForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
+import {MyButton} from "../../../shared/ui/my-button";
 
 export const GameOptionsModal: FC = () => {
 
@@ -47,12 +48,12 @@ export const GameOptionsModal: FC = () => {
                 <RadioButtonGroup
                     label="Время на ход (мин)"
                     data={[
-                        {value: 0, label: '-'},
+                        // {value: 0, label: '-'},
                         {value: 5, label: '5'},
                         {value: 10, label: '10'},
                         {value: 15, label: '15'},
                     ]}
-                    value={fields.time || 0}
+                    value={fields.time || 15}
                     onChange={item => onChangeField('time', item.value)}
                 />
 
@@ -67,7 +68,7 @@ export const GameOptionsModal: FC = () => {
                     onChange={item => onChangeField('level', item.value)}
                 />
 
-                <Button color='#b58863' size='md' type='submit'>Играть</Button>
+                <MyButton type='submit'>Играть</MyButton>
             </form>
         </Modal>
     );

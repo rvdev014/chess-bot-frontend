@@ -6,6 +6,7 @@ import {ICreateRoomForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
 import {ModalLoader} from "../../../shared/ui/loader/modal-loader.tsx";
+import {MyButton} from "../../../shared/ui/my-button";
 
 export const CreateRoomModal: FC = () => {
 
@@ -64,12 +65,12 @@ export const CreateRoomModal: FC = () => {
                 <RadioButtonGroup
                     label="Время на ход (мин)"
                     data={[
-                        {value: 0, label: '-'},
+                        // {value: 0, label: '-'},
                         {value: 5, label: '5'},
                         {value: 10, label: '10'},
                         {value: 15, label: '15'},
                     ]}
-                    value={fields.time || 0}
+                    value={fields.time || 15}
                     onChange={item => onChangeField('time', item.value)}
                 />
 
@@ -81,7 +82,7 @@ export const CreateRoomModal: FC = () => {
                     onChange={value => onChangeField('friend', value)}
                 />
 
-                <Button color='#b58863' size='md' type='submit'>Пригласить друга</Button>
+                <MyButton type='submit'>Пригласить друга</MyButton>
             </form>
         </Modal>
     );

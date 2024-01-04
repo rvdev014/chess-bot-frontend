@@ -8,13 +8,8 @@ import {PlayerTimer} from "./player-timer.tsx";
 export const RobotGamePanel = () => {
     const mySide = useGameStore(state => state.mySide);
 
-    console.log('RobotGamePanel')
-
     return (
         <div className={styles.wrapper}>
-            <div className={styles.header}>
-
-            </div>
             <div className={styles.gamePanel}>
                 {/*<PlayerTimer side={'black'}/>*/}
                 <MyChessboardClickable isRobot={true}/>

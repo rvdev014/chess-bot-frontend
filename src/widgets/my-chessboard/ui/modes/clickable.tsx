@@ -1,7 +1,11 @@
-import {FC, useEffect} from "react";
+import React, {FC, useEffect} from "react";
 import {useGameStore} from "../../../../shared/model/game/store.ts";
 import {useClickableBoard} from "../../model/useClickableBoard.ts";
 import {MyChessboard} from "../default.tsx";
+import {shallow} from "zustand/shallow";
+import {GameOverPopup} from "../../../../features/game-over-popup/ui";
+import {useLobbyStore} from "../../../../shared/model/lobby/store.ts";
+import {history} from "../../../../app/router/router-history.ts";
 
 interface IProps {
     isRobot?: boolean;
@@ -9,22 +13,49 @@ interface IProps {
 
 export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
 
-    const chess = useGameStore(state => state.chess);
-    const engine = useGameStore(state => state.engine);
-    const gamePosition = useGameStore(state => state.gamePosition);
+    const [
+        chess,
+        engine,
+        gamePosition,
+        mySide,
+        robotLevel,
+        isMyTurn,
+        isGameOver,
+        isGameOverPopup,
+        setGameOverPopup,
+        winner,
+        gameOverReason,
+        isViewMode,
+        onViewMode,
+        initGame,
+        resetGame,
+        onMove,
+        onGameOver,
+    ] = useGameStore(state => [
+        state.chess,
+        state.engine,
+        state.gamePosition,
+        state.mySide,
+        state.robotLevel,
+        state.isMyTurn,
+        state.isGameOver,
+        state.isGameOverPopup,
+        state.setGameOverPopup,
+        state.winner,
+        state.gameOverReason,
+        state.isViewMode,
+        state.onViewMode,
+        state.initGame,
+        state.resetGame,
+        state.onMove,
+        state.onGameOver,
+    ], shallow);
 
-    const mySide = useGameStore(state => state.mySide);
-    const robotLevel = useGameStore(state => state.robotLevel);
-    const isMyTurn = useGameStore(state => state.isMyTurn);
-    const isGameOver = useGameStore(state => state.isGameOver);
-    const gameOverReason = useGameStore(state => state.gameOverReason);
-    const isViewMode = useGameStore(state => state.isViewMode);
-    const onViewMode = useGameStore(state => state.onViewMode);
-
-    const initGame = useGameStore(state => state.initGame);
-    const resetGame = useGameStore(state => state.resetGame);
-    const onMove = useGameStore(state => state.onMove);
-    const onGameOver = useGameStore(state => state.onGameOver);
+    function onHomeClick() {
+        useLobbyStore.getState().reset();
+        useGameStore.getState().reset();
+        history.push('/');
+    }
 
     const {
         moveTo,
@@ -40,25 +71,33 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
     }, []);
 
     return (
-        <MyChessboard
-            isRobot={isRobot}
-            level={robotLevel}
-            type={'clickable'}
-            chess={chess}
-            engine={engine}
-            gamePosition={gamePosition}
-            mySide={mySide}
-            isMyTurn={isMyTurn}
-            isGameOver={isGameOver}
-            gameOverReason={gameOverReason}
-            isViewMode={isViewMode}
-            onViewMode={onViewMode}
-            onGameOver={onGameOver}
-            onSquareClick={onSquareClick}
-            onPromotionPieceSelect={onPromotionPieceSelect}
-            customSquareStyles={optionSquares}
-            promotionToSquare={moveTo}
-            showPromotionDialog={showPromotionDialog}
-        />
+        <>
+            <MyChessboard
+                type={'clickable'}
+                isRobot={isRobot}
+                robotLevel={robotLevel}
+                chess={chess}
+                engine={engine}
+                gamePosition={gamePosition}
+                mySide={mySide}
+                isMyTurn={isMyTurn}
+                isGameOver={isGameOver}
+                onGameOver={onGameOver}
+                onSquareClick={onSquareClick}
+                onPromotionPieceSelect={onPromotionPieceSelect}
+                customSquareStyles={optionSquares}
+                promotionToSquare={moveTo}
+                showPromotionDialog={showPromotionDialog}
+            />
+
+            <GameOverPopup
+                winner={winner}
+                gameOverReason={gameOverReason}
+                isOpen={isGameOverPopup}
+                setOpen={setGameOverPopup}
+                onViewMode={onViewMode}
+                onHomeClick={onHomeClick}
+            />
+        </>
     )
 }

@@ -1,7 +1,11 @@
-import {FC, useEffect} from "react";
+import React, {FC, useEffect} from "react";
 import {Square} from "chess.ts/dist/types";
 import {useGameStore} from "../../../../shared/model/game/store.ts";
 import {MyChessboard} from "../default.tsx";
+import {GameOverPopup} from "../../../../features/game-over-popup/ui";
+import {shallow} from "zustand/shallow";
+import {useLobbyStore} from "../../../../shared/model/lobby/store.ts";
+import {history} from "../../../../app/router/router-history.ts";
 
 interface IProps {
     isRobot?: boolean;
@@ -9,21 +13,49 @@ interface IProps {
 
 export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
 
-    const chess = useGameStore(state => state.chess);
-    const engine = useGameStore(state => state.engine);
-    const gamePosition = useGameStore(state => state.gamePosition);
+    const [
+        chess,
+        engine,
+        gamePosition,
+        mySide,
+        robotLevel,
+        isMyTurn,
+        isGameOver,
+        isGameOverPopup,
+        setGameOverPopup,
+        gameOverReason,
+        winner,
+        isViewMode,
+        onViewMode,
+        initGame,
+        resetGame,
+        onMove,
+        onGameOver,
+    ] = useGameStore(state => [
+        state.chess,
+        state.engine,
+        state.gamePosition,
+        state.mySide,
+        state.robotLevel,
+        state.isMyTurn,
+        state.isGameOver,
+        state.isGameOverPopup,
+        state.setGameOverPopup,
+        state.gameOverReason,
+        state.winner,
+        state.isViewMode,
+        state.onViewMode,
+        state.initGame,
+        state.resetGame,
+        state.onMove,
+        state.onGameOver,
+    ], shallow);
 
-    const mySide = useGameStore(state => state.mySide);
-    const isMyTurn = useGameStore(state => state.isMyTurn);
-    const isGameOver = useGameStore(state => state.isGameOver);
-    const gameOverReason = useGameStore(state => state.gameOverReason);
-    const isViewMode = useGameStore(state => state.isViewMode);
-    const onViewMode = useGameStore(state => state.onViewMode);
-
-    const initGame = useGameStore(state => state.initGame);
-    const resetGame = useGameStore(state => state.resetGame);
-    const onMove = useGameStore(state => state.onMove);
-    const onGameOver = useGameStore(state => state.onGameOver);
+    function onHomeClick() {
+        useLobbyStore.getState().reset();
+        useGameStore.getState().reset();
+        history.push('/');
+    }
 
     useEffect(() => {
         initGame(isRobot);
@@ -52,20 +84,28 @@ export const MyChessboardDraggable: FC<IProps> = ({isRobot = false}) => {
     console.log('MyChessboardDraggable')
 
     return (
-        <MyChessboard
-            isRobot={isRobot}
-            type={'draggable'}
-            chess={chess}
-            engine={engine}
-            gamePosition={gamePosition}
-            mySide={mySide}
-            isMyTurn={isMyTurn}
-            isGameOver={isGameOver}
-            gameOverReason={gameOverReason}
-            isViewMode={isViewMode}
-            onViewMode={onViewMode}
-            onGameOver={onGameOver}
-            onPieceDrop={onPieceDrop}
-        />
+        <>
+            <MyChessboard
+                isRobot={isRobot}
+                type={'draggable'}
+                chess={chess}
+                engine={engine}
+                gamePosition={gamePosition}
+                mySide={mySide}
+                isMyTurn={isMyTurn}
+                isGameOver={isGameOver}
+                onGameOver={onGameOver}
+                onPieceDrop={onPieceDrop}
+            />
+
+            <GameOverPopup
+                winner={winner}
+                gameOverReason={gameOverReason}
+                isOpen={isGameOverPopup}
+                setOpen={setGameOverPopup}
+                onViewMode={onViewMode}
+                onHomeClick={onHomeClick}
+            />
+        </>
     )
 }

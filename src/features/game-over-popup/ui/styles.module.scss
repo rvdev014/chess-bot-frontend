@@ -1,0 +1,24 @@
+.gameOverModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+.buttonsBlock {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewBtn {
+  margin-right: .5rem;
+}

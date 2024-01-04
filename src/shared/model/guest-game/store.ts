@@ -85,26 +85,28 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
         onGameOver(winner, reason) {
             set({
                 isGameOver: true,
-                gameOverReason: `${lcFirst(winner)} won! ${gameOverLabels[reason]}`,
+                isGameOverPopup: true,
+                winner,
+                gameOverReason: reason,
             })
         },
 
         onGameOverEvent(gameState) {
-            console.log('gameState', gameState)
-            set({
-                isGameOver: true,
-                gameOverReason: `${lcFirst(gameState.winner)} won! ${gameState.reason ? gameOverLabels[gameState.reason] : ''}`,
-                whiteTimeLeft: gameState.white.timeLeft,
-                blackTimeLeft: gameState.black.timeLeft,
-            })
+            if (gameState.winner && gameState.reason) {
+                get().onGameOver(gameState.winner, gameState.reason)
+                set({
+                    whiteTimeLeft: gameState.white.timeLeft,
+                    blackTimeLeft: gameState.black.timeLeft,
+                })
+            }
         },
 
-        onOpponentDisconnected() {
-            console.log('Opponent disconnected')
-            set({
-                isGameOver: true,
-                gameOverReason: 'Opponent disconnected',
-            })
+        onOpponentDisconnected(side) {
+            get().onGameOver(side === 'white' ? 'black' : 'white', 'disconnect')
+        },
+
+        onViewMode() {
+            set({isGameOverPopup: false});
         },
 
         resetGuestGame() {

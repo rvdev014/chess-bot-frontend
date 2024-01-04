@@ -3,8 +3,6 @@ import {IGameOptions, IGameOverState, IGameStore, IMoveState} from "./store-type
 import {socket} from "../../api/socket.ts";
 import {Chess, PieceSymbol} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
-import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
-import {lcFirst} from "../../utils.ts";
 import {useLobbyStore} from "../lobby/store.ts";
 
 const defaultTimeLimit = 60 * 15;
@@ -17,7 +15,6 @@ const initialStore = {
     gamePosition: undefined,
     opponent: null,
     isGameOver: false,
-    isViewMode: false,
     gameOverReason: null,
     timeLimit: defaultTimeLimit,
     myTimeLeft: defaultTimeLimit,
@@ -27,6 +24,10 @@ const initialStore = {
 export const useGameStore = create<IGameStore>((set, get) => {
     return {
         ...initialStore,
+
+        setGameOverPopup(isGameOverPopup) {
+            set({isGameOverPopup});
+        },
 
         onConnect() {
             console.log('Connected')
@@ -47,8 +48,8 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 myTimeLeft: timeLimit,
                 opponentTimeLeft: timeLimit,
                 robotLevel: gameOptions.robotLevel || defaultRobotLevel,
-                isViewMode: false,
                 isGameOver: false,
+                isGameOverPopup: false,
                 gameOverReason: null,
             })
 
@@ -133,7 +134,9 @@ export const useGameStore = create<IGameStore>((set, get) => {
         onGameOver(winner, reason) {
             set({
                 isGameOver: true,
-                gameOverReason: `${lcFirst(winner)} won! ${gameOverLabels[reason]}`,
+                isGameOverPopup: true,
+                winner,
+                gameOverReason: reason
             })
 
             const gameOverState = {
@@ -147,7 +150,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         onViewMode() {
-            set({isViewMode: true});
+            set({isGameOverPopup: false});
         },
 
         onShareClick() {
@@ -160,10 +163,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
 
         onOpponentDisconnected() {
             console.log('Opponent disconnected')
-            set({
-                isGameOver: true,
-                gameOverReason: 'Opponent disconnected',
-            })
+            get().onGameOver(get().mySide === 'white' ? 'white' : 'black', 'disconnect')
         },
 
         resetGame() {

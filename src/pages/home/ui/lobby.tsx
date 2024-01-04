@@ -10,10 +10,9 @@ import {LocalLobby} from "./local-lobby.tsx";
 import {ModalLoader} from "../../../shared/ui/loader/modal-loader.tsx";
 import {Button} from "@mantine/core";
 import {useAppStore} from "../../../shared/model/app-store.ts";
+import {MyButton} from "../../../shared/ui/my-button";
 
 export const HomeLobby = () => {
-
-    const navbarButtons = useAppStore(state => state.navbarButtons);
 
     const [
         opponent,
@@ -74,12 +73,12 @@ export const HomeLobby = () => {
                     <>
                         <div className={styles.lobbyWrapper}>
                             <h1 className='title'>Let's Chess!</h1>
-                            <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayLocal}>
-                                Play local
-                            </Button>
-                            <Button color='#b58863' size={'md'} className={styles.btn} onClick={onSearchOpponent}>
-                                Play online
-                            </Button>
+                            <MyButton className={styles.btn} onClick={onPlayLocal}>
+                                Играть локально
+                            </MyButton>
+                            <MyButton className={styles.btn} onClick={onSearchOpponent}>
+                                Играть онлайн
+                            </MyButton>
                         </div>
                         <ModalLoader
                             title={'Ищем соперника...'}

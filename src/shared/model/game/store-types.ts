@@ -32,49 +32,46 @@ export interface IGameOverState {
     blackTimeLeft: number;
 }
 
-export interface IGameStore {
-    isGameStarted: boolean;
-    isRobot: boolean;
-    isMyTurn: boolean;
-    isGameOver: boolean;
-    isViewMode: boolean;
-
+export interface IBoardState {
     chess: Chess;
     engine: Engine;
     gamePosition: string | BoardPosition | undefined;
+    isRobot: boolean;
+    robotLevel?: number;
+    mySide: SideType;
+    isMyTurn: boolean;
+    isGameOver: boolean;
+    onGameOver(winner: SideType, reason: GameOverReasonType): void;
+}
+
+export interface IGameStore extends IBoardState {
+    isGameStarted: boolean;
+    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
+
+    winner: SideType | null;
+    gameOverReason: GameOverReasonType | null;
+    isGameOverPopup: boolean;
+    setGameOverPopup(isGameOverPopup: boolean): void;
+
+    onViewMode(): void;
+    onShareClick(): void;
+
     roomId: string | null;
     timeLimit: number;
-    robotLevel: number;
 
     opponent: IOpponent | null;
     opponentTimeLeft: number;
-
     onOpponentMove(moveState: IMoveState): void;
-
     onOpponentTimeChange(): void;
-
     onOpponentDisconnected(): void;
 
-    mySide: SideType;
     myTimeLeft: number;
-
     onMove(movement: Move): void;
-
     onMyTimeChange(): void;
 
-    onGameOver(winner: SideType, reason: GameOverReasonType): void;
-
-    gameOverReason: string | null;
-
+    onGameOverEvent(gameState: IGameOverState): void;
     initGame(isRobot: boolean): void;
-
     resetGame(): void;
 
     reset(): void;
-
-    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
-
-    onViewMode(): void;
-
-    onShareClick(): void;
 }

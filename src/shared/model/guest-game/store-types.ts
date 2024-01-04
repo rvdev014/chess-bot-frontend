@@ -31,7 +31,14 @@ export interface IGuestGameStore {
     isLoading: boolean;
     isGameFound: boolean;
     isGameOver: boolean;
-    gameOverReason: string | null;
+    isGameOverPopup: boolean;
+
+    setGameOverPopup(isGameOverPopup: boolean): void;
+
+    onViewMode(): void;
+
+    gameOverReason: GameOverReasonType | null;
+    winner: SideType | null;
 
     onConnect(): void;
 
@@ -49,7 +56,7 @@ export interface IGuestGameStore {
 
     onGameOverEvent(gameState: IGameState): void;
 
-    onOpponentDisconnected(): void;
+    onOpponentDisconnected(side: SideType): void;
 
     resetGuestGame(): void;
 }
