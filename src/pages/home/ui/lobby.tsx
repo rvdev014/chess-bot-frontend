@@ -61,6 +61,21 @@ export const HomeLobby = () => {
     }, []);
 
     function renderContent() {
+        const tgData: object = window?.Telegram?.WebApp?.initDataUnsafe;
+        //{
+        //     "query_id": "AAHLRVwgAAAAAMtFXCCOMmYj",
+        //     "user": {
+        //         "id": 542918091,
+        //         "first_name": "Mr.O",
+        //         "last_name": "",
+        //         "username": "bosya1",
+        //         "language_code": "ru",
+        //         "allows_write_to_pm": true
+        //     },
+        //     "auth_date": "1704380916",
+        //     "hash": "f525d70ec5697653161464b397e14d035c2559542e7b5d22fffbf9a084e29f4c"
+        // }
+        console.log(tgData)
         switch (true) {
             case !!opponent:
                 return <PlayerGamePanel/>;
