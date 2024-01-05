@@ -4,7 +4,7 @@ import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
 import {CreateRoomModal} from "../../../features/create-room-modal/ui";
 import {GameOptionsModal} from "../../../features/game-options-modal/ui";
-import {Button} from "@mantine/core";
+import {MyButton} from "../../../shared/ui/my-button";
 
 export const LocalLobby = () => {
 
@@ -20,13 +20,13 @@ export const LocalLobby = () => {
         <>
 
             <div className={styles.lobbyWrapper}>
-                <h1 className='title'>Game mode</h1>
-                <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayWithFriend}>
+                <h1 className='title'>Выбрать игру</h1>
+                <MyButton size='md' className={styles.btn} onClick={onPlayWithFriend}>
                     Играть с другом
-                </Button>
-                <Button color='#b58863' size={'md'} className={styles.btn} onClick={onPlayWithRobot}>
+                </MyButton>
+                <MyButton size='md' className={styles.btn} onClick={onPlayWithRobot}>
                     Играть с роботом
-                </Button>
+                </MyButton>
             </div>
 
             <CreateRoomModal/>

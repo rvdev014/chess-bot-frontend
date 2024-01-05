@@ -1,6 +1,17 @@
 .playerWrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  &:first-child {
+    justify-content: flex-start;
+    margin-bottom: .5rem;
+  }
+
+  &:last-child {
+    justify-content: flex-end;
+    margin-top: .5rem;
+  }
 }
 
 .playerWrapper.bottomSide {
@@ -10,6 +21,8 @@
 .playerName {
   color: #fff;
   margin-right: 10px;
+  font-size: 24px;
+  font-weight: 500;
 }
 
 .playerTime {

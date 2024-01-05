@@ -4,6 +4,7 @@ import {socket} from "../../api/socket.ts";
 import {IGameOptions} from "../game/store-types.ts";
 import {history} from "../../../app/router/router-history.ts";
 import {useGameStore} from "../game/store.ts";
+import {openConfirm} from "../../utils.ts";
 
 const initialStore = {
     isWaitingFriend: false,
@@ -20,12 +21,12 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
 
         onHomeClick() {
             if (useGameStore.getState().isGameStarted) {
-                if (confirm('Are you sure you want to leave the game?')) {
+                openConfirm('Вы хотите покинуть игру?', () => {
                     socket.emit('game:leave');
                     get().reset();
                     useGameStore.getState().reset();
                     history.push('/');
-                }
+                });
             } else {
                 get().reset();
             }

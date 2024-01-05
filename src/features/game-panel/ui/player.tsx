@@ -7,7 +7,7 @@ import {PlayerTimer} from "./player-timer.tsx";
 import {Button} from "@mantine/core";
 
 export const PlayerGamePanel = () => {
-    const timeLimit = useGameStore(state => state.timeLimit);
+    // const timeLimit = useGameStore(state => state.timeLimit);
     const mySide = useGameStore(state => state.mySide);
 
     return (

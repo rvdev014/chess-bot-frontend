@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import styles from './styles.module.scss';
 import {Button} from "@mantine/core";
+import {UI_COLOR} from "../../consts.ts";
 
 interface IDataItem {
     value: any;
@@ -25,7 +26,7 @@ export const RadioButtonGroup: FC<IProps> = ({data, label, value, onChange}) => 
                         className={styles.button}
                         variant={value === item.value ? '' : 'light'}
                         onClick={() => onChange(item)}
-                        color='#b58863'
+                        color={UI_COLOR}
                     >
                         {item.label}
                     </Button>

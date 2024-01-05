@@ -18,6 +18,8 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         engine,
         gamePosition,
         mySide,
+        myTimeLeft,
+        opponentTimeLeft,
         robotLevel,
         isMyTurn,
         isGameOver,
@@ -25,7 +27,6 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         setGameOverPopup,
         winner,
         gameOverReason,
-        isViewMode,
         onViewMode,
         initGame,
         resetGame,
@@ -36,6 +37,8 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         state.engine,
         state.gamePosition,
         state.mySide,
+        state.myTimeLeft,
+        state.opponentTimeLeft,
         state.robotLevel,
         state.isMyTurn,
         state.isGameOver,
@@ -43,7 +46,6 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         state.setGameOverPopup,
         state.winner,
         state.gameOverReason,
-        state.isViewMode,
         state.onViewMode,
         state.initGame,
         state.resetGame,
@@ -92,6 +94,8 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
 
             <GameOverPopup
                 winner={winner}
+                whiteTimeLeft={mySide === 'white' ? myTimeLeft : opponentTimeLeft}
+                blackTimeLeft={mySide === 'black' ? myTimeLeft : opponentTimeLeft}
                 gameOverReason={gameOverReason}
                 isOpen={isGameOverPopup}
                 setOpen={setGameOverPopup}

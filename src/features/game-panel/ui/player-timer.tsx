@@ -35,7 +35,7 @@ export const PlayerTimer: FC<IProps> = ({side}) => {
             timeLeft={side === mySide ? myTimeLeft : opponentTimeLeft}
             onTimeChange={side === mySide ? onMyTimeChange : onOpponentTimeChange}
             type={side === mySide ? 'bottom' : 'top'}
-            // username={side === mySide ? 'You' : 'Opponent'}
+            username={side === mySide ? 'Вы' : 'Соперник'}
         />
     );
 };

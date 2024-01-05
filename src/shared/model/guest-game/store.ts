@@ -3,8 +3,6 @@ import {IGuestGameStore} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {Chess} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
-import {gameOverLabels} from "../../../features/game-panel/model/utils.ts";
-import {lcFirst} from "../../utils.ts";
 
 const initialStore = {
     chess: new Chess(),

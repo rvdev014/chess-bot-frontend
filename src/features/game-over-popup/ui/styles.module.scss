@@ -12,11 +12,48 @@
   font-weight: 500;
 }
 
+.text {
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+.playersBlock {
+}
+
+.playerBlock {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.chessIconWrapper {
+  padding: 3px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9a982;
+  border-radius: 3px;
+}
+
+.chessIcon {
+  font-size: 24px;
+}
+
+.whiteChessIcon {
+  color: #fff;
+}
+
 .buttonsBlock {
   margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.time {
+  margin-left: 1rem;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .viewBtn {

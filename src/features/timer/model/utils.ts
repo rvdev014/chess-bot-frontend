@@ -1,4 +1,4 @@
-export function format(time?: number) {
+export function formatTime(time?: number) {
     if (time === null || time === undefined) {
         return 'Waiting...';
     }

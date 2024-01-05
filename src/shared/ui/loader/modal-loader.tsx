@@ -1,6 +1,8 @@
 import React, {FC} from 'react';
 import styles from "./styles.module.scss";
 import {Button, Loader, Modal} from "@mantine/core";
+import {UI_COLOR} from "../../consts.ts";
+import {MyButton} from "../my-button";
 
 interface IProps {
     title?: string;
@@ -26,8 +28,8 @@ export const ModalLoader: FC<IProps> = ({title, opened, onCancel}) => {
             closeOnClickOutside={false}
         >
             <div className={styles.loaderWrapper}>
-                <Loader size='lg' className={styles.loader}/>
-                {onCancel && <Button color='#b58863' onClick={onCancel}>Отмена</Button>}
+                <Loader color={UI_COLOR} size='lg' className={styles.loader}/>
+                {onCancel && <MyButton onClick={onCancel}>Отмена</MyButton>}
             </div>
         </Modal>
     );

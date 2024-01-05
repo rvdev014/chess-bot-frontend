@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useRef} from 'react';
 import styles from "./styles.module.scss";
-import {format} from "../model/utils.ts";
+import {formatTime} from "../model/utils.ts";
 
 interface IProps {
     isRunning: boolean;
@@ -37,7 +37,7 @@ export const Timer: FC<IProps> = ({isRunning, ...props}) => {
                 {props.username}
             </div>
             <div className={styles.playerTime}>
-                {format(props.timeLeft)}
+                {formatTime(props.timeLeft)}
             </div>
         </div>
     );

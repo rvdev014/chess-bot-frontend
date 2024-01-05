@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import {Button, Modal} from "@mantine/core";
+import {Modal} from "@mantine/core";
 import {IoHome} from "react-icons/io5";
 import {AiOutlineFullscreen, AiOutlineFullscreenExit} from "react-icons/ai";
 import {MdInfoOutline} from "react-icons/md";
@@ -8,6 +8,7 @@ import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {useGameStore} from "../../../shared/model/game/store.ts";
 import {shallow} from "zustand/shallow";
 import {IoMdShare} from "react-icons/io";
+import {MyButton} from "../../../shared/ui/my-button";
 
 export const Navbar = () => {
 
@@ -63,47 +64,27 @@ export const Navbar = () => {
             <div className={styles.header}>
                 <div>
                     {getIsHome() &&
-                        <Button
-                            size={'md'}
-                            className={styles.mainBtn}
-                            onClick={onHomeClick}
-                            color='#b58863'
-                        >
-                            <IoHome className={styles.mainIcon}/>
-                        </Button>}
+                        <MyButton className={styles.mainBtn} onClick={onHomeClick}>
+                            <IoHome className='mainIcon'/>
+                        </MyButton>}
                 </div>
 
                 <div>
 
                     {getIsShare() &&
-                        <Button
-                            size={'md'}
-                            className={styles.mainBtn}
-                            onClick={onShareClick}
-                            color='#b58863'
-                        >
-                            <IoMdShare className={styles.mainIcon}/>
-                        </Button>}
+                        <MyButton className={styles.mainBtn} onClick={onShareClick}>
+                            <IoMdShare className='mainIcon'/>
+                        </MyButton>}
 
-                    <Button
-                        size={'md'}
-                        className={styles.mainBtn}
-                        onClick={onInfoClick}
-                        color='#b58863'
-                    >
-                        <MdInfoOutline className={styles.mainIcon}/>
-                    </Button>
+                    <MyButton className={styles.mainBtn} onClick={onInfoClick}>
+                        <MdInfoOutline className='mainIcon'/>
+                    </MyButton>
 
-                    <Button
-                        size={'md'}
-                        className={styles.mainBtn}
-                        onClick={onFullscreenClick}
-                        color='#b58863'
-                    >
+                    <MyButton className={styles.mainBtn} onClick={onFullscreenClick}>
                         {isFullscreen
-                            ? <AiOutlineFullscreenExit className={styles.mainIcon}/>
-                            : <AiOutlineFullscreen className={styles.mainIcon}/>}
-                    </Button>
+                            ? <AiOutlineFullscreenExit className='mainIcon'/>
+                            : <AiOutlineFullscreen className='mainIcon'/>}
+                    </MyButton>
                 </div>
             </div>
 
@@ -112,7 +93,7 @@ export const Navbar = () => {
                     opened={isInfoModalOpen}
                     onClose={onInfoModalClose}
                     title={'About Let\'s Chess'}
-                    size={'md'}
+                    size={'sm'}
                     overlayProps={{
                         backgroundOpacity: 0.55,
                         blur: 3,

@@ -6,10 +6,13 @@ import {Modal} from "@mantine/core";
 import {IoHome} from "react-icons/io5";
 import {gameOverLabels} from "../../game-panel/model/utils.ts";
 import {GameOverReasonType, SideType} from "../../../shared/model/game/store-types.ts";
-import {lcFirst} from "../../../shared/utils.ts";
+import {GiChessQueen} from "react-icons/gi";
+import {formatTime} from "../../timer/model/utils.ts";
 
 interface IProps {
     winner: SideType | null;
+    whiteTimeLeft: number;
+    blackTimeLeft: number;
     gameOverReason: GameOverReasonType | null;
     isOpen: boolean;
     setOpen: (isOpen: boolean) => void;
@@ -24,7 +27,7 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
     }
 
     function getWinner() {
-        return winner ? `${lcFirst(winner)} won` : 'Draw';
+        return winner ? `${winner === 'black' ? 'Чёрный' : 'Белый'} победил` : 'Ничья';
     }
 
     return (
@@ -44,12 +47,26 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
             <div className={styles.gameOverModal}>
                 <p className={styles.title}>{getReasonLabel()}</p>
                 <p className={styles.text}>{getWinner()}</p>
+                <div className={styles.playersBlock}>
+                    <div className={styles.playerBlock}>
+                        <div className={styles.chessIconWrapper}>
+                            <GiChessQueen className={`${styles.chessIcon} ${styles.whiteChessIcon}`}/>
+                        </div>
+                        <span className={styles.time}>{formatTime(props.whiteTimeLeft)}</span>
+                    </div>
+                    <div className={styles.playerBlock}>
+                        <div className={styles.chessIconWrapper}>
+                            <GiChessQueen className={styles.chessIcon}/>
+                        </div>
+                        <span className={styles.time}>{formatTime(props.blackTimeLeft)}</span>
+                    </div>
+                </div>
                 <div className={styles.buttonsBlock}>
                     <MyButton className={styles.viewBtn} onClick={props.onHomeClick}>
-                        <IoHome/>
+                        <IoHome className='mainIcon'/>
                     </MyButton>
                     <MyButton className={styles.viewBtn} onClick={props.onViewMode}>
-                        <FaEye/>
+                        <FaEye className='mainIcon'/>
                     </MyButton>
                 </div>
             </div>
