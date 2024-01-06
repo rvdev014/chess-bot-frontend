@@ -57,7 +57,7 @@ export const FriendGamePage = () => {
 
     function renderContent() {
         if (!opponent) {
-            return <div>RoomId is invalid!</div>
+            return <div className='title-sm'>RoomId is invalid!</div>
         }
 
         return (
@@ -73,9 +73,8 @@ export const FriendGamePage = () => {
     }
 
     return (
-        <div>
-            <h1 className='title'>Friend page</h1>
+        <>
             {renderContent()}
-        </div>
+        </>
     );
 };

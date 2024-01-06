@@ -1,22 +1,31 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import styles from "./styles.module.scss";
-import {Button, Loader, Modal, Select} from "@mantine/core";
+import {Input, Loader, Modal, Select} from "@mantine/core";
 import {RadioButtonGroup} from "../../../shared/ui/radio-button-group";
 import {ICreateRoomForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
-import {ModalLoader} from "../../../shared/ui/loader/modal-loader.tsx";
 import {MyButton} from "../../../shared/ui/my-button";
+import {useAppStore} from "../../../shared/model/app-store.ts";
+import {MainApi} from "../../../shared/api/main-api.ts";
+import {IFriend} from "../../../shared/model/app-store-types.ts";
+import {FaCopy} from "react-icons/fa";
+import {UI_COLOR} from "../../../shared/consts.ts";
 
 export const CreateRoomModal: FC = () => {
 
+    const me = useAppStore(state => state.me);
+    const [friends, setFriends] = React.useState<IFriend[]>([]);
+
     const [
+        inviteUrl,
         isWaitingFriend,
         isCreateRoomModal,
         onCancelWaitingFriend,
         onCloseCreateRoomModal,
         onSubmitCreateRoomForm,
     ] = useLobbyStore(state => [
+        state.inviteUrl,
         state.isWaitingFriend,
         state.isCreateRoomModal,
         state.onCancelWaitingFriend,
@@ -25,6 +34,15 @@ export const CreateRoomModal: FC = () => {
     ], shallow);
 
     const [fields, setFields] = React.useState<ICreateRoomForm>({});
+
+    useEffect(() => {
+        (async () => {
+            const friends = await MainApi.getUserFriends(me?.user_id);
+            if (friends) {
+                setFriends(friends);
+            }
+        })()
+    }, []);
 
     function onChangeField(key: string, value: any) {
         setFields({...fields, [key]: value})
@@ -37,11 +55,39 @@ export const CreateRoomModal: FC = () => {
 
     if (isWaitingFriend) {
         return (
-            <ModalLoader
-                title={'Ожидаем друга...'}
+            <Modal
+                title='Ожидание друга'
                 opened={isWaitingFriend}
-                onCancel={onCancelWaitingFriend}
-            />
+                onClose={() => {
+                }}
+                withCloseButton={false}
+                closeOnClickOutside={false}
+                centered
+            >
+                <p className={styles.text}>Ссылка на игру отправлена другу</p>
+                {/*<div className={styles.inviteUrlWrapper}>
+                    <Input
+                        size='xs'
+                        defaultValue={inviteUrl}
+                        className={styles.inviteUrl}
+                        readOnly={true}
+                    />
+                    <MyButton
+                        size='xs'
+                        className={styles.btn}
+                        onClick={() => navigator.clipboard.writeText(inviteUrl)}
+                    >
+                        <FaCopy/>
+                    </MyButton>
+                </div>*/}
+                <div className={styles.inviteLoaderWrapper}>
+                    <div className={styles.inviteLoader}>
+                        <Loader color={UI_COLOR} size='md'/>
+                        {/*<span className={styles.loaderText}>Ожидание друга...</span>*/}
+                    </div>
+                    <MyButton className={styles.cancelBtn} onClick={onCancelWaitingFriend}>Отмена</MyButton>
+                </div>
+            </Modal>
         );
     }
 
@@ -70,16 +116,17 @@ export const CreateRoomModal: FC = () => {
                         {value: 10, label: '10'},
                         {value: 15, label: '15'},
                     ]}
-                    value={fields.time || 15}
-                    onChange={item => onChangeField('time', item.value)}
+                    value={fields.timeLimit || 15}
+                    onChange={item => onChangeField('timeLimit', item.value)}
                 />
 
                 <Select
                     label="Выберите друга"
                     className={styles.field}
+                    value={fields.friendId}
                     placeholder="Выберите друга"
-                    data={['React', 'Angular', 'Vue', 'Svelte']}
-                    onChange={value => onChangeField('friend', value)}
+                    data={friends.map(friend => ({value: friend.friend_id.toString(), label: friend.friend_name}))}
+                    onChange={value => onChangeField('friendId', value)}
                 />
 
                 <MyButton type='submit'>Пригласить друга</MyButton>

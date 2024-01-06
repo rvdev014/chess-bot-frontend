@@ -4,8 +4,8 @@ export interface IGameOptionsForm {
 }
 
 export interface ICreateRoomForm {
-    time?: number;
-    friend?: string;
+    friendId?: string;
+    timeLimit?: number;
 }
 
 export interface ILobbyStore {
@@ -15,6 +15,8 @@ export interface ILobbyStore {
     isCreateRoomModal: boolean;
     isGameOptionsModal: boolean;
     isPlayingLocal: boolean;
+
+    inviteUrl: string;
 
     onHomeClick(): void;
 
@@ -39,6 +41,8 @@ export interface ILobbyStore {
     onPlayWithFriend(): void;
 
     onPlayWithRobot(): void;
+
+    onRoomCreated(inviteUrl: string): void;
 
     onDisconnect(): void;
 

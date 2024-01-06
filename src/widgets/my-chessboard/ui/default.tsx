@@ -30,6 +30,8 @@ export const MyChessboard: FC<IProps> = (
         engine.evaluatePosition(chess.fen(), props.robotLevel ?? 1);
     }
 
+    console.log('Chessboard')
+
     return (
         <div className={styles.board}>
             {(!props.isMyTurn && !props.isGameOver) && <div className={`${styles.overlay} ${styles.turnOverlay}`}/>}

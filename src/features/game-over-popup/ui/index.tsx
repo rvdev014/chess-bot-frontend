@@ -13,6 +13,8 @@ interface IProps {
     winner: SideType | null;
     whiteTimeLeft: number;
     blackTimeLeft: number;
+    whitePlayerName?: string;
+    blackPlayerName?: string;
     gameOverReason: GameOverReasonType | null;
     isOpen: boolean;
     setOpen: (isOpen: boolean) => void;
@@ -42,21 +44,28 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
             }}
             size={'xs'}
             withCloseButton={false}
+            closeOnClickOutside={false}
             centered
         >
             <div className={styles.gameOverModal}>
                 <p className={styles.title}>{getReasonLabel()}</p>
                 <p className={styles.text}>{getWinner()}</p>
                 <div className={styles.playersBlock}>
-                    <div className={styles.playerBlock}>
-                        <div className={styles.chessIconWrapper}>
-                            <GiChessQueen className={`${styles.chessIcon} ${styles.whiteChessIcon}`}/>
+                    <div className={styles.playerRow}>
+                        <div className={styles.playerLeft}>
+                            <div className={styles.chessIconWrapper}>
+                                <GiChessQueen className={`${styles.chessIcon} ${styles.whiteChessIcon}`}/>
+                            </div>
+                            <span className={styles.playerName}>{props.whitePlayerName}</span>
                         </div>
                         <span className={styles.time}>{formatTime(props.whiteTimeLeft)}</span>
                     </div>
-                    <div className={styles.playerBlock}>
-                        <div className={styles.chessIconWrapper}>
-                            <GiChessQueen className={styles.chessIcon}/>
+                    <div className={styles.playerRow}>
+                        <div className={styles.playerLeft}>
+                            <div className={styles.chessIconWrapper}>
+                                <GiChessQueen className={styles.chessIcon}/>
+                            </div>
+                            <span className={styles.playerName}>{props.blackPlayerName}</span>
                         </div>
                         <span className={styles.time}>{formatTime(props.blackTimeLeft)}</span>
                     </div>

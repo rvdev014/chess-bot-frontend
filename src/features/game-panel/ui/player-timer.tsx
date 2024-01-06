@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {useGameStore} from "../../../shared/model/game/store.ts";
 import {Timer} from "../../timer";
 import {SideType} from "../../../shared/model/game/store-types.ts";
+import {useAppStore} from "../../../shared/model/app-store.ts";
 
 interface IProps {
     side: SideType;
@@ -9,6 +10,8 @@ interface IProps {
 
 export const PlayerTimer: FC<IProps> = ({side}) => {
 
+    const me = useAppStore(state => state.me);
+    const opponent = useGameStore(state => state.opponent);
     const mySide = useGameStore(state => state.mySide);
     const isMyTurn = useGameStore(state => state.isMyTurn);
     const isGameOver = useGameStore(state => state.isGameOver);
@@ -35,7 +38,7 @@ export const PlayerTimer: FC<IProps> = ({side}) => {
             timeLeft={side === mySide ? myTimeLeft : opponentTimeLeft}
             onTimeChange={side === mySide ? onMyTimeChange : onOpponentTimeChange}
             type={side === mySide ? 'bottom' : 'top'}
-            username={side === mySide ? 'Вы' : 'Соперник'}
+            username={side === mySide ? me?.username || 'Вы' : opponent?.username || 'Соперник'}
         />
     );
 };

@@ -3,6 +3,7 @@ import {IGuestGameStore} from "./store-types.ts";
 import {socket} from "../../api/socket.ts";
 import {Chess} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
+import {MainApi} from "../../api/main-api.ts";
 
 const initialStore = {
     chess: new Chess(),
@@ -27,7 +28,7 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
             socket.emit('game:join-guest', roomId)
         },
 
-        onJoinGuest(game) {
+        async onJoinGuest(game) {
             if (game) {
                 console.log('Joined as guest', game)
                 const newChess = new Chess();
@@ -35,7 +36,8 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
                     newChess.load(game.lastFen);
                 }
 
-                console.log('game', game)
+                const whitePlayer = await MainApi.getUser(game.white.userId);
+                const blackPlayer = await MainApi.getUser(game.black.userId);
 
                 set({
                     chess: newChess,
@@ -43,7 +45,8 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
                     gamePosition: newChess.fen(),
                     isGameFound: true,
                     isLoading: false,
-
+                    whitePlayer,
+                    blackPlayer,
                     whiteTimeLeft: game.white.timeLeft,
                     blackTimeLeft: game.black.timeLeft,
                     currentTurn: game.currentTurn,

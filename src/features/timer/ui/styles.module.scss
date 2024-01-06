@@ -5,12 +5,12 @@
 
   &:first-child {
     justify-content: flex-start;
-    margin-bottom: .5rem;
+    margin-bottom: 3px;
   }
 
   &:last-child {
     justify-content: flex-end;
-    margin-top: .5rem;
+    margin-top: 3px;
   }
 }
 
@@ -20,13 +20,15 @@
 
 .playerName {
   color: #fff;
-  margin-right: 10px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
 }
 
 .playerTime {
   color: #fff;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
+  min-width: 50px;
+  display: flex;
+  justify-content: flex-end;
 }

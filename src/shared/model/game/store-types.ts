@@ -2,8 +2,9 @@ import {Move} from "chess.ts/dist/types";
 import {Chess} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {BoardPosition} from "react-chessboard/dist/chessboard/types";
+import {IUserData} from "../app-store-types.ts";
 
-export interface IOpponent {
+export interface ISocketClient {
     userId?: string;
     socketId: string;
     timeLeft?: number;
@@ -46,7 +47,7 @@ export interface IBoardState {
 
 export interface IGameStore extends IBoardState {
     isGameStarted: boolean;
-    onGameStarted(opponent: IOpponent, mySide: SideType, roomId: string): void;
+    onGameStarted(opponent: ISocketClient, mySide: SideType, roomId: string): void;
 
     winner: SideType | null;
     gameOverReason: GameOverReasonType | null;
@@ -59,7 +60,7 @@ export interface IGameStore extends IBoardState {
     roomId: string | null;
     timeLimit: number;
 
-    opponent: IOpponent | null;
+    opponent: IUserData | null;
     opponentTimeLeft: number;
     onOpponentMove(moveState: IMoveState): void;
     onOpponentTimeChange(): void;

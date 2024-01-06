@@ -3,9 +3,6 @@ import {useGameStore} from "../../../../shared/model/game/store.ts";
 import {useClickableBoard} from "../../model/useClickableBoard.ts";
 import {MyChessboard} from "../default.tsx";
 import {shallow} from "zustand/shallow";
-import {GameOverPopup} from "../../../../features/game-over-popup/ui";
-import {useLobbyStore} from "../../../../shared/model/lobby/store.ts";
-import {history} from "../../../../app/router/router-history.ts";
 
 interface IProps {
     isRobot?: boolean;
@@ -18,16 +15,9 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         engine,
         gamePosition,
         mySide,
-        myTimeLeft,
-        opponentTimeLeft,
         robotLevel,
         isMyTurn,
         isGameOver,
-        isGameOverPopup,
-        setGameOverPopup,
-        winner,
-        gameOverReason,
-        onViewMode,
         initGame,
         resetGame,
         onMove,
@@ -37,27 +27,14 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
         state.engine,
         state.gamePosition,
         state.mySide,
-        state.myTimeLeft,
-        state.opponentTimeLeft,
         state.robotLevel,
         state.isMyTurn,
         state.isGameOver,
-        state.isGameOverPopup,
-        state.setGameOverPopup,
-        state.winner,
-        state.gameOverReason,
-        state.onViewMode,
         state.initGame,
         state.resetGame,
         state.onMove,
         state.onGameOver,
     ], shallow);
-
-    function onHomeClick() {
-        useLobbyStore.getState().reset();
-        useGameStore.getState().reset();
-        history.push('/');
-    }
 
     const {
         moveTo,
@@ -90,17 +67,6 @@ export const MyChessboardClickable: FC<IProps> = ({isRobot = false}) => {
                 customSquareStyles={optionSquares}
                 promotionToSquare={moveTo}
                 showPromotionDialog={showPromotionDialog}
-            />
-
-            <GameOverPopup
-                winner={winner}
-                whiteTimeLeft={mySide === 'white' ? myTimeLeft : opponentTimeLeft}
-                blackTimeLeft={mySide === 'black' ? myTimeLeft : opponentTimeLeft}
-                gameOverReason={gameOverReason}
-                isOpen={isGameOverPopup}
-                setOpen={setGameOverPopup}
-                onViewMode={onViewMode}
-                onHomeClick={onHomeClick}
             />
         </>
     )

@@ -1,13 +1,27 @@
 export type NavbarButtonsType = 'home' | 'info' | 'settings' | 'exit';
 
+export interface IFriend {
+    friend_id: number;
+    friend_name: string;
+    user_id: number;
+    user_name: string;
+}
+
 export interface IUserData {
-    id: string;
-    chatId: string;
-    gender: string;
-    age: number;
+    id: number;
+    user_id: string;
     username: string;
-    fio: string;
-    avatar: string;
+    name: string;
+    language?: any;
+    referral?: any;
+    gender?: any;
+    active: boolean;
+    age?: any;
+    socket_id?: any;
+    last_name: string;
+    language_code: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ITgUser {

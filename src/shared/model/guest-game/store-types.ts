@@ -1,7 +1,8 @@
 import {Chess} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {BoardPosition} from "react-chessboard/dist/chessboard/types";
-import {GameOverReasonType, IMoveState, SideType} from "../game/store-types.ts";
+import {GameOverReasonType, IMoveState, ISocketClient, SideType} from "../game/store-types.ts";
+import {IUserData} from "../app-store-types.ts";
 
 export interface IPlayerState {
     userId: string;
@@ -25,6 +26,8 @@ export interface IGuestGameStore {
     gamePosition: string | BoardPosition | undefined;
     roomId: string | null;
     currentTurn: SideType | null;
+    whitePlayer: IUserData | null;
+    blackPlayer: IUserData | null;
     whiteTimeLeft: number;
     blackTimeLeft: number;
 

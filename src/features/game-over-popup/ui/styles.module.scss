@@ -7,7 +7,7 @@
 
 .title {
   text-align: center;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 30px;
   font-weight: 500;
 }
@@ -18,12 +18,25 @@
 }
 
 .playersBlock {
+  width: 100%;
 }
 
-.playerBlock {
+.playerRow {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: .5rem;
+}
+
+.playerLeft {
+  display: flex;
+  align-items: center;
+}
+
+.playerName {
+  margin-left: .5rem;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .chessIconWrapper {

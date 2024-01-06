@@ -63,7 +63,7 @@ export const GuestGamePage = () => {
                     <GuestGamePanel/>
                     <ModalLoader opened={isLoading}/>
                 </> :
-                <div>Room id is invalid!</div>}
+                <h3 className='title-sm'>Room id is invalid!</h3>}
         </>
     );
 };

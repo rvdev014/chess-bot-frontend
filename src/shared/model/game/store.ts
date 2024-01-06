@@ -4,6 +4,8 @@ import {socket} from "../../api/socket.ts";
 import {Chess, PieceSymbol} from "chess.ts";
 import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {useLobbyStore} from "../lobby/store.ts";
+import {apiInstance} from "../../api/axios.ts";
+import {MainApi} from "../../api/main-api.ts";
 
 const defaultTimeLimit = 60 * 15;
 const defaultRobotLevel = 1;
@@ -16,6 +18,7 @@ const initialStore = {
     opponent: null,
     isGameOver: false,
     gameOverReason: null,
+    roomId: null,
     timeLimit: defaultTimeLimit,
     myTimeLeft: defaultTimeLimit,
     opponentTimeLeft: defaultTimeLimit,
@@ -35,8 +38,11 @@ export const useGameStore = create<IGameStore>((set, get) => {
 
         initGame(isRobot = false) {
             const newChess = new Chess();
+            let timeLimit = defaultTimeLimit;
             const gameOptions: IGameOptions = JSON.parse(localStorage.getItem('gameOptions') || '{}');
-            const timeLimit = gameOptions.timeLimit ? gameOptions.timeLimit * 60 : defaultTimeLimit;
+            if (isRobot && gameOptions.timeLimit) {
+                timeLimit = gameOptions.timeLimit * 60;
+            }
 
             set({
                 isGameStarted: true,
@@ -73,14 +79,25 @@ export const useGameStore = create<IGameStore>((set, get) => {
             }
         },
 
-        onGameStarted(opponent, mySide, roomId) {
+        async onGameStarted(opponent, mySide, roomId) {
             useLobbyStore.getState().onCancelSearch();
-            set({
-                mySide,
-                roomId,
-                opponent,
-                isMyTurn: mySide === 'white',
-            });
+            try {
+                console.log('opponent', opponent)
+                const userOpponent = await MainApi.getUser(opponent.userId);
+                // only 15 minutes for online plays
+                const timeLimit = 15 * 60;
+                set({
+                    mySide,
+                    roomId,
+                    timeLimit,
+                    myTimeLeft: timeLimit,
+                    opponentTimeLeft: timeLimit,
+                    opponent: userOpponent,
+                    isMyTurn: mySide === 'white',
+                });
+            } catch (e) {
+                console.log(e);
+            }
         },
 
         onMove(movement) {

@@ -5,6 +5,8 @@ import {IGameOptions} from "../game/store-types.ts";
 import {history} from "../../../app/router/router-history.ts";
 import {useGameStore} from "../game/store.ts";
 import {openConfirm} from "../../utils.ts";
+import {useAppStore} from "../app-store.ts";
+import {useGuestGameStore} from "../guest-game/store.ts";
 
 const initialStore = {
     isWaitingFriend: false,
@@ -23,18 +25,28 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
             if (useGameStore.getState().isGameStarted) {
                 openConfirm('Вы хотите покинуть игру?', () => {
                     socket.emit('game:leave');
-                    get().reset();
                     useGameStore.getState().reset();
+                    get().reset();
+                    history.push('/');
+                });
+            } else if (useGuestGameStore.getState().isGameFound) {
+                openConfirm('Вы хотите покинуть игру?', () => {
+                    socket.emit('game:leave');
+                    useGuestGameStore.getState().resetGuestGame();
+                    get().reset();
                     history.push('/');
                 });
             } else {
                 get().reset();
+                history.push('/');
             }
+
         },
 
         onSearchOpponent() {
+            const me = useAppStore.getState().me;
             set({isSearching: true});
-            socket.emit('game:search');
+            socket.emit('game:search', me?.user_id);
         },
 
         onPlayLocal() {
@@ -76,12 +88,16 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
         },
 
         onCancelWaitingFriend() {
+            set({isWaitingFriend: false})
             socket.emit('game:create-room-cancel');
-            set({isWaitingFriend: false});
         },
 
         onCloseCreateRoomModal() {
             set({isCreateRoomModal: false});
+        },
+
+        onRoomCreated(inviteUrl) {
+            set({inviteUrl});
         },
 
         onPlayWithRobot() {

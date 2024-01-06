@@ -15,12 +15,12 @@ import {MyButton} from "../../../shared/ui/my-button";
 export const HomeLobby = () => {
 
     const [
-        opponent,
+        roomId,
         onGameStarted,
         onOpponentMove,
         onOpponentDisconnected
     ] = useGameStore(state => [
-        state.opponent,
+        state.roomId,
         state.onGameStarted,
         state.onOpponentMove,
         state.onOpponentDisconnected
@@ -61,8 +61,9 @@ export const HomeLobby = () => {
     }, []);
 
     function renderContent() {
+        console.log('roomId', roomId)
         switch (true) {
-            case !!opponent:
+            case !!roomId:
                 return <PlayerGamePanel/>;
 
             case isPlayingLocal:

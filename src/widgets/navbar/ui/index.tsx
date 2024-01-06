@@ -9,8 +9,12 @@ import {useGameStore} from "../../../shared/model/game/store.ts";
 import {shallow} from "zustand/shallow";
 import {IoMdShare} from "react-icons/io";
 import {MyButton} from "../../../shared/ui/my-button";
+import {useGuestGameStore} from "../../../shared/model/guest-game/store.ts";
 
 export const Navbar = () => {
+
+    // get location from store
+    const isGameFound = useGuestGameStore(state => state.isGameFound);
 
     const [
         isPlayingLocal,
@@ -22,11 +26,11 @@ export const Navbar = () => {
 
     const [
         isGameStarted,
-        opponent,
+        roomId,
         onShareClick
     ] = useGameStore(state => [
         state.isGameStarted,
-        state.opponent,
+        state.roomId,
         state.onShareClick
     ], shallow);
 
@@ -34,7 +38,7 @@ export const Navbar = () => {
     const [isFullscreen, setIsFullscreen] = React.useState(false);
 
     function getIsHome() {
-        return isPlayingLocal || isGameStarted;
+        return isPlayingLocal || isGameStarted || isGameFound;
     }
 
     function onInfoClick() {
@@ -56,7 +60,7 @@ export const Navbar = () => {
     }
 
     function getIsShare() {
-        return !!opponent;
+        return !!roomId;
     }
 
     return (

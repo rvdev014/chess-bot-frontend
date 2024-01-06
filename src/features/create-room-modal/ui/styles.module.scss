@@ -19,3 +19,41 @@
 .field {
     margin-bottom: 1rem;
 }
+
+.inviteLoaderWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.inviteLoader {
+    margin: .5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .loaderText {
+        margin: .5rem;
+    }
+}
+
+.cancelBtn {
+    margin-top: .5rem;
+}
+
+.text {
+    font-size: 14px;
+    line-height: 16px;
+    margin-bottom: .5rem;
+}
+
+.inviteUrlWrapper {
+    display: flex;
+    width: 100%;
+}
+
+.inviteUrl {
+    flex-grow: 1;
+    margin-right: 3px;
+}

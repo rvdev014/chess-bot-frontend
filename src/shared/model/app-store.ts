@@ -9,7 +9,7 @@ const initialStore = {
 export const useAppStore = create<IAppStore>((set, get) => {
     return {
         ...initialStore,
-        initTelegram: () => {
+        initTelegram: async () => {
             // @ts-ignore
             const tg = window.Telegram.WebApp;
             tg.ready();
@@ -17,14 +17,8 @@ export const useAppStore = create<IAppStore>((set, get) => {
             const tgDataUnsafe: ITgDataUnsafe = tg.initDataUnsafe;
             if (!tgDataUnsafe?.user) return;
 
-            const me = {
-                fio: `${tgDataUnsafe.user.first_name} ${tgDataUnsafe.user.last_name}`,
-                username: tgDataUnsafe.user.username,
-                // avatar: tgDataUnsafe.user.photo_url,
-                chatId: tgDataUnsafe.user.id.toString(),
-            } as IUserData;
-
-            set({me});
+            const me = await apiInstance.get<IUserData>(`/user/${tgDataUnsafe.user.id}`);
+            set({me: me.data});
         },
         setMe: (me) => set({me}),
         fetchMe: async () => {
