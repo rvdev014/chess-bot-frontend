@@ -115,7 +115,7 @@ export const useClickableBoard = (chess: Chess, mySide: SideType, onMove: (move:
             const movement = {
                 from: moveFrom,
                 to: moveTo,
-                promotion: piece[1].toLowerCase() as PieceSymbol ?? "q",
+                promotion: piece[1]?.toLowerCase() as PieceSymbol ?? "q",
             };
 
             const move = chess.move(movement);
