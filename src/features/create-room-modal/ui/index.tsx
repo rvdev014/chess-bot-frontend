@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import styles from "./styles.module.scss";
-import {Input, Loader, Modal, Select} from "@mantine/core";
+import {Loader, Modal, Select} from "@mantine/core";
 import {RadioButtonGroup} from "../../../shared/ui/radio-button-group";
 import {ICreateRoomForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
@@ -9,7 +9,6 @@ import {MyButton} from "../../../shared/ui/my-button";
 import {useAppStore} from "../../../shared/model/app-store.ts";
 import {MainApi} from "../../../shared/api/main-api.ts";
 import {IFriend} from "../../../shared/model/app-store-types.ts";
-import {FaCopy} from "react-icons/fa";
 import {UI_COLOR} from "../../../shared/consts.ts";
 
 export const CreateRoomModal: FC = () => {

@@ -6,6 +6,8 @@ import {Engine} from "../../../widgets/my-chessboard/model/engine.ts";
 import {useLobbyStore} from "../lobby/store.ts";
 import {apiInstance} from "../../api/axios.ts";
 import {MainApi} from "../../api/main-api.ts";
+import {notifications} from "@mantine/notifications";
+import {useAppStore} from "../app-store.ts";
 
 const defaultTimeLimit = 60 * 15;
 const defaultRobotLevel = 1;
@@ -170,12 +172,39 @@ export const useGameStore = create<IGameStore>((set, get) => {
             set({isGameOverPopup: false});
         },
 
+        async onShareFriend(friendIds) {
+            try {
+                const roomId = get().roomId;
+                const me = useAppStore.getState().me || {user_id: 355919981};
+                const inviteUrl = `http://localhost:5173/guest/${roomId}`;
+                const response = await apiInstance.post(`/user/${me?.user_id}/share`, {
+                    inviteUrl,
+                    friendIds
+                })
+                /*notifications.show({
+                    title: 'Успешно',
+                    message: 'Ссылка отправлена друзьям',
+                })*/
+            } catch (e: any) {
+                console.log(e);
+                /*notifications.show({
+                    title: e?.response?.code,
+                    message: 'Ошибка при отправке приглашения',
+                })*/
+            }
+        },
+
         onShareClick() {
-            const roomId = get().roomId;
+            /*const roomId = get().roomId;
             const url = `http://localhost:5173/guest/${roomId}`;
             navigator.clipboard.writeText(url).then(() => {
                 alert('Copied to clipboard');
-            });
+            });*/
+            set({isSharePopup: true});
+        },
+
+        setSharePopup(isSharePopup) {
+            set({isSharePopup});
         },
 
         onOpponentDisconnected() {

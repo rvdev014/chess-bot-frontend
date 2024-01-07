@@ -3,6 +3,9 @@ import {IFriend, IUserData} from "../model/app-store-types.ts";
 
 export const MainApi = {
     async getUser(userId?: string) {
+        if (!userId) {
+            // return null;
+        }
         try {
             const response = await apiInstance.get<IUserData>(`/user/${userId}`);
             return response.data;

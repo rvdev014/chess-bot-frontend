@@ -1,0 +1,22 @@
+.inviteUrlWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+
+  .inviteUrl {
+    flex-grow: 1;
+    margin-right: 3px;
+  }
+}
+
+.text {
+  margin: .5rem 0;
+  font-size: 14px;
+}
+
+.friendsSelect {
+}
+
+.sendBtn {
+  margin-top: 1rem;
+  width: 100%;
+}

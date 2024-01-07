@@ -10,6 +10,7 @@ import {shallow} from "zustand/shallow";
 import {IoMdShare} from "react-icons/io";
 import {MyButton} from "../../../shared/ui/my-button";
 import {useGuestGameStore} from "../../../shared/model/guest-game/store.ts";
+import {SharePopup} from "../../../features/share-popup";
 
 export const Navbar = () => {
 
@@ -27,10 +28,12 @@ export const Navbar = () => {
     const [
         isGameStarted,
         roomId,
+        isSharePopup,
         onShareClick
     ] = useGameStore(state => [
         state.isGameStarted,
         state.roomId,
+        state.isSharePopup,
         state.onShareClick
     ], shallow);
 
@@ -91,6 +94,8 @@ export const Navbar = () => {
                     </MyButton>
                 </div>
             </div>
+
+            {isSharePopup && <SharePopup/>}
 
             {isInfoModalOpen &&
                 <Modal
