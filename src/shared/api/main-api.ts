@@ -16,7 +16,7 @@ export const MainApi = {
 
     async getUserFriends(userId?: string) {
         if (!userId) {
-            userId = 'null';
+            userId = '542918091';
             // return null;
         }
         try {
