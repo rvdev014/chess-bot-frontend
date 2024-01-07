@@ -9,7 +9,7 @@
     line-height: 42px;
     text-transform: uppercase;
     text-align: center;
-    color: #fff;
+    color: var(--tg-theme-text-color);
     margin-bottom: 1rem;
 }
 
