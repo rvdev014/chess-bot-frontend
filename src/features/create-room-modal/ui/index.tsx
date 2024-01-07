@@ -130,9 +130,8 @@ export const CreateRoomModal: FC = () => {
                     value={fields.friendId}
                     placeholder={friends?.length > 0 ? 'Выберите друга' : 'Сначала добавьте друга'}
                     data={friends.map(friend => {
-                        console.log(friend?.friend_id, me?.user_id)
                         return ({
-                            value: parseInt(friend?.friend_id) === parseInt(me?.user_id) ? friend?.user_id.toString() : friend?.friend_id,
+                            value: parseInt(friend?.friend_id) === parseInt(me?.user_id) ? friend.user_id.toString() : friend.friend_id.toString(),
                             label: parseInt(friend?.friend_id) === parseInt(me?.user_id) ? friend?.user_name : friend?.friend_name
                         });
                     })}
