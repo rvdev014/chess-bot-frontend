@@ -49,6 +49,11 @@ export const CreateRoomModal: FC = () => {
 
     function onSubmitForm(e: any) {
         e.preventDefault();
+
+        if (!fields?.friendId) {
+            return;
+        }
+
         onSubmitCreateRoomForm(fields)
     }
 
@@ -123,7 +128,7 @@ export const CreateRoomModal: FC = () => {
                     label="Выберите друга"
                     className={styles.field}
                     value={fields.friendId}
-                    placeholder="Выберите друга"
+                    placeholder={friends?.length > 0 ? 'Выберите друга' : 'Сначала добавьте друга'}
                     data={friends.map(friend => ({value: friend.friend_id.toString(), label: friend.friend_name}))}
                     onChange={value => onChangeField('friendId', value)}
                 />
