@@ -106,7 +106,7 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
             get().onGameOver(side === 'white' ? 'black' : 'white', 'disconnect')
         },
 
-        onViewMode() {
+        onViewClick() {
             set({isGameOverPopup: false});
         },
 

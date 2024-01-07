@@ -38,7 +38,7 @@ export interface IGuestGameStore {
 
     setGameOverPopup(isGameOverPopup: boolean): void;
 
-    onViewMode(): void;
+    onViewClick(): void;
 
     gameOverReason: GameOverReasonType | null;
     winner: SideType | null;

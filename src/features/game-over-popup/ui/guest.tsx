@@ -15,7 +15,7 @@ export const GuestGameOverPopup = () => {
         whiteTimeLeft,
         blackTimeLeft,
         gameOverReason,
-        onViewMode,
+        onViewClick,
         isGameOverPopup,
         setGameOverPopup,
     ] = useGuestGameStore(state => [
@@ -25,7 +25,7 @@ export const GuestGameOverPopup = () => {
         state.whiteTimeLeft,
         state.blackTimeLeft,
         state.gameOverReason,
-        state.onViewMode,
+        state.onViewClick,
         state.isGameOverPopup,
         state.setGameOverPopup,
     ], shallow);
@@ -40,7 +40,7 @@ export const GuestGameOverPopup = () => {
             gameOverReason={gameOverReason}
             isOpen={isGameOverPopup}
             setOpen={setGameOverPopup}
-            onViewMode={onViewMode}
+            onViewClick={onViewClick}
             onHomeClick={onHomeClick}
         />
     );

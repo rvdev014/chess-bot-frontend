@@ -17,7 +17,7 @@ export const PlayerGameOverPopup = () => {
         opponentTimeLeft,
         isGameOverPopup,
         setGameOverPopup,
-        onViewMode,
+        onViewClick,
         gameOverReason,
     ] = useGameStore(state => [
         state.winner,
@@ -27,7 +27,7 @@ export const PlayerGameOverPopup = () => {
         state.opponentTimeLeft,
         state.isGameOverPopup,
         state.setGameOverPopup,
-        state.onViewMode,
+        state.onViewClick,
         state.gameOverReason,
     ]);
 
@@ -41,7 +41,7 @@ export const PlayerGameOverPopup = () => {
             gameOverReason={gameOverReason}
             isOpen={isGameOverPopup}
             setOpen={setGameOverPopup}
-            onViewMode={onViewMode}
+            onViewClick={onViewClick}
             onHomeClick={onHomeClick}
         />
     );

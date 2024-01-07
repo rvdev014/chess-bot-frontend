@@ -19,13 +19,13 @@
 }
 
 .playerName {
-  color: #fff;
+  color: var(--tg-theme-text-color);
   font-size: 18px;
   font-weight: 500;
 }
 
 .playerTime {
-  color: #fff;
+  color: var(--tg-theme-text-color);
   font-size: 18px;
   font-weight: 600;
   min-width: 50px;

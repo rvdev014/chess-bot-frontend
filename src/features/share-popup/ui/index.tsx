@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import styles from './styles.module.scss';
-import {Input, Modal, MultiSelect} from "@mantine/core";
+import {CopyButton, Input, Modal, MultiSelect} from "@mantine/core";
 import {useGameStore} from "../../../shared/model/game/store.ts";
 import {shallow} from "zustand/shallow";
 import {MyButton} from "../../../shared/ui/my-button";
-import {FaCopy} from "react-icons/fa";
+import {FaCheck, FaCopy} from "react-icons/fa";
 import {IFriend} from "../../../shared/model/app-store-types.ts";
 import {MainApi} from "../../../shared/api/main-api.ts";
 import {useAppStore} from "../../../shared/model/app-store.ts";
+import {UI_COLOR} from "../../../shared/consts.ts";
 
 export const SharePopup = () => {
 
@@ -40,6 +41,12 @@ export const SharePopup = () => {
         return `http://localhost:5173/guest/${roomId}`;
     }
 
+    async function onCopyClick() {
+        console.log('Copying...')
+        await navigator.clipboard.writeText(getInviteUrl())
+        console.log('getInviteUrl()', getInviteUrl())
+    }
+
     return (
         <Modal
             opened={isSharePopup}
@@ -64,13 +71,18 @@ export const SharePopup = () => {
                         className={styles.inviteUrl}
                         readOnly={true}
                     />
-                    <MyButton
-                        size='xs'
-                        className={styles.btn}
-                        onClick={() => navigator.clipboard.writeText(getInviteUrl())}
-                    >
-                        <FaCopy/>
-                    </MyButton>
+                    <CopyButton value={getInviteUrl()}>
+                        {({copied, copy}) => (
+                            <MyButton
+                                size='xs'
+                                className={styles.btn}
+                                onClick={copy}
+                                // color={copied ? 'green' : UI_COLOR}
+                            >
+                                {copied ? <FaCheck/> : <FaCopy/>}
+                            </MyButton>
+                        )}
+                    </CopyButton>
                 </div>
 
                 <p className={styles.text}>Или сразу отправьте ссылку другу</p>
