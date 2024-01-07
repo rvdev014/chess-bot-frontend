@@ -8,8 +8,8 @@ import {Notifications} from "@mantine/notifications";
 function App() {
     return (
         <MantineProvider>
-            <Notifications />
             <ModalsProvider>
+                <Notifications />
                 <Routing/>
             </ModalsProvider>
         </MantineProvider>

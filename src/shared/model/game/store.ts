@@ -151,6 +151,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         onGameOver(winner, reason) {
+            console.log('asdadsasdds')
             set({
                 isGameOver: true,
                 isGameOverPopup: true,
@@ -168,7 +169,7 @@ export const useGameStore = create<IGameStore>((set, get) => {
             socket.emit('game:over', gameOverState);
         },
 
-        onViewMode() {
+        onViewClick() {
             set({isGameOverPopup: false});
         },
 

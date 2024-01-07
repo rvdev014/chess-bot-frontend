@@ -18,7 +18,7 @@ interface IProps {
     gameOverReason: GameOverReasonType | null;
     isOpen: boolean;
     setOpen: (isOpen: boolean) => void;
-    onViewMode: () => void;
+    onViewClick: () => void;
     onHomeClick: () => void;
 }
 
@@ -74,7 +74,7 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
                     <MyButton className={styles.viewBtn} onClick={props.onHomeClick}>
                         <IoHome className='mainIcon'/>
                     </MyButton>
-                    <MyButton className={styles.viewBtn} onClick={props.onViewMode}>
+                    <MyButton className={styles.viewBtn} onClick={props.onViewClick}>
                         <FaEye className='mainIcon'/>
                     </MyButton>
                 </div>

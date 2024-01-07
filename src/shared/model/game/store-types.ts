@@ -54,7 +54,7 @@ export interface IGameStore extends IBoardState {
     isGameOverPopup: boolean;
     setGameOverPopup(isGameOverPopup: boolean): void;
 
-    onViewMode(): void;
+    onViewClick(): void;
     isSharePopup: boolean;
     setSharePopup(isSharePopup: boolean): void;
     onShareFriend(friendIds: string[]): void;
