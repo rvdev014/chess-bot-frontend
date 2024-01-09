@@ -33,7 +33,7 @@ export const MyChessboard: FC<IProps> = (
     console.log('Chessboard')
 
     return (
-        <div className={styles.board}>
+        <div className={styles.board} style={{width: `${window.innerWidth < 500 ? `${window.innerWidth - 20}px` : ''}`}}>
             {(!props.isMyTurn && !props.isGameOver) && <div className={`${styles.overlay} ${styles.turnOverlay}`}/>}
             <Chessboard
                 id="BasicBoard"

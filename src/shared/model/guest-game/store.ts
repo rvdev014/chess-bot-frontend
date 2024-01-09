@@ -23,6 +23,7 @@ export const useGuestGameStore = create<IGuestGameStore>((set, get) => {
         onConnect() {
             console.log('Connected')
         },
+
         initGuestGame(roomId) {
             set({isLoading: true})
             socket.emit('game:join-guest', roomId)

@@ -8,8 +8,6 @@ import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
 import {LocalLobby} from "./local-lobby.tsx";
 import {ModalLoader} from "../../../shared/ui/loader/modal-loader.tsx";
-import {Button} from "@mantine/core";
-import {useAppStore} from "../../../shared/model/app-store.ts";
 import {MyButton} from "../../../shared/ui/my-button";
 
 export const HomeLobby = () => {
@@ -74,10 +72,10 @@ export const HomeLobby = () => {
                     <>
                         <div className={styles.lobbyWrapper}>
                             <h1 className='title'>Let's Chess!</h1>
-                            <MyButton size='md' className={styles.btn} onClick={onPlayLocal}>
+                            <MyButton size='xl' className={styles.btn} onClick={onPlayLocal}>
                                 Играть локально
                             </MyButton>
-                            <MyButton size='md' className={styles.btn} onClick={onSearchOpponent}>
+                            <MyButton size='xl' className={styles.btn} onClick={onSearchOpponent}>
                                 Играть онлайн
                             </MyButton>
                         </div>

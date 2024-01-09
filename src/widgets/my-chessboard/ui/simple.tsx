@@ -18,27 +18,8 @@ interface IProps extends React.ComponentProps<typeof Chessboard> {
 export const MyChessboardSimple: FC<IProps> = (
     {chess, gamePosition, ...props}
 ) => {
-
-    /*useEffect(() => {
-        if (chess.gameOver() || chess.inDraw()) {
-            props.onGameOver(
-                chess.turn() === 'w' ? 'black' : 'white',
-                chess.inDraw() ? 'draw' : 'checkmate'
-            );
-            return;
-        }
-    }, [gamePosition])*/
-
     return (
-        <div className={styles.board}>
-            {/*{props.isGameOver && (
-                <div className={`${styles.overlay} ${styles.gameOverOverlay}`}>
-                    <div>
-                        <h2 className={styles.title}>Game is over</h2>
-                        <p className={styles.text}>{props.gameOverReason}</p>
-                    </div>
-                </div>
-            )}*/}
+        <div className={styles.board} style={{width: `${window.innerWidth < 500 ? `${window.innerWidth - 20}px` : ''}`}}>
             <Chessboard
                 id="BasicBoard"
                 arePiecesDraggable={false}

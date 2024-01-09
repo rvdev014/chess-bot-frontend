@@ -6,6 +6,7 @@ import {IGameOptionsForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
 import {shallow} from "zustand/shallow";
 import {MyButton} from "../../../shared/ui/my-button";
+import {MyModal} from "../../../shared/ui/my-modal";
 
 export const GameOptionsModal: FC = () => {
 
@@ -31,18 +32,10 @@ export const GameOptionsModal: FC = () => {
     }
 
     return (
-        <Modal
+        <MyModal
             opened={isGameOptionsModal}
             onClose={onCloseGameOptionsModal}
-            size='xs'
             title='Настройки игры'
-            transitionProps={{transition: 'fade', duration: 200}}
-            overlayProps={{
-                backgroundOpacity: 0.55,
-                blur: 3,
-            }}
-            centered
-            closeOnClickOutside={false}
         >
             <form className={styles.formWrapper} onSubmit={onSubmitForm}>
                 <RadioButtonGroup
@@ -66,10 +59,11 @@ export const GameOptionsModal: FC = () => {
                     ]}
                     value={fields.level || 1}
                     onChange={item => onChangeField('level', item.value)}
+                    className={styles.difficulty}
                 />
 
                 <MyButton type='submit'>Играть</MyButton>
             </form>
-        </Modal>
+        </MyModal>
     );
 };

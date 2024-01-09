@@ -13,7 +13,9 @@ export const GuestTimer: FC<IProps> = ({side, ...props}) => {
     const isGameOver = useGuestGameStore(state => state.isGameOver);
     const currentTurn = useGuestGameStore(state => state.currentTurn);
     const whiteTimeLeft = useGuestGameStore(state => state.whiteTimeLeft);
+    const whitePlayer = useGuestGameStore(state => state.whitePlayer);
     const blackTimeLeft = useGuestGameStore(state => state.blackTimeLeft);
+    const blackPlayer = useGuestGameStore(state => state.blackPlayer);
     const onTimeChange = useGuestGameStore(state => state.onTimeChange);
 
     function getTimeLeft() {
@@ -26,6 +28,7 @@ export const GuestTimer: FC<IProps> = ({side, ...props}) => {
             timeLeft={side === 'white' ? whiteTimeLeft : blackTimeLeft}
             onTimeChange={() => onTimeChange(side)}
             type={props.type}
+            username={side === 'white' ? (whitePlayer?.username || 'Белый') : (blackPlayer?.username || 'Чёрный')}
         />
     );
 };

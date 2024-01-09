@@ -4,6 +4,7 @@ import {apiInstance} from "../api/axios.ts";
 
 const initialStore = {
     me: null,
+    isTelegramWebApp: false,
 } as IAppStore;
 
 export const useAppStore = create<IAppStore>((set, get) => {
@@ -15,10 +16,16 @@ export const useAppStore = create<IAppStore>((set, get) => {
             tg.ready();
 
             const tgDataUnsafe: ITgDataUnsafe = tg.initDataUnsafe;
-            if (!tgDataUnsafe?.user) return;
+            if (!tgDataUnsafe?.user) {
+                set({isTelegramWebApp: false});
+                return;
+            }
 
             const me = await apiInstance.get<IUserData>(`/user/${tgDataUnsafe.user.id}`);
-            set({me: me.data});
+            set({
+                me: me.data,
+                isTelegramWebApp: true
+            });
         },
         setMe: (me) => set({me}),
         fetchMe: async () => {

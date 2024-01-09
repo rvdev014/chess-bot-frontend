@@ -7,11 +7,15 @@
 
   .button {
     margin-right: 0.5rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 
 .label {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   color: #000;
   margin-bottom: 5px;

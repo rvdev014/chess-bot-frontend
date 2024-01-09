@@ -22,14 +22,14 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
         ...initialStore,
 
         onHomeClick() {
-            if (useGameStore.getState().isGameStarted) {
+            if (useGameStore.getState().isGameStarted && !useGameStore.getState().isGameOver) {
                 openConfirm('Вы хотите покинуть игру?', () => {
                     socket.emit('game:leave');
                     useGameStore.getState().reset();
                     get().reset();
                     history.push('/');
                 });
-            } else if (useGuestGameStore.getState().isGameFound) {
+            } else if (useGuestGameStore.getState().isGameFound && !useGuestGameStore.getState().isGameOver) {
                 openConfirm('Вы хотите покинуть игру?', () => {
                     socket.emit('game:leave');
                     useGuestGameStore.getState().resetGuestGame();
@@ -37,6 +37,9 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
                     history.push('/');
                 });
             } else {
+                socket.emit('game:leave');
+                useGameStore.getState().reset();
+                useGuestGameStore.getState().resetGuestGame();
                 get().reset();
                 history.push('/');
             }

@@ -11,10 +11,12 @@ import {IoMdShare} from "react-icons/io";
 import {MyButton} from "../../../shared/ui/my-button";
 import {useGuestGameStore} from "../../../shared/model/guest-game/store.ts";
 import {SharePopup} from "../../../features/share-popup";
+import {useAppStore} from "../../../shared/model/app-store.ts";
 
 export const Navbar = () => {
 
     // get location from store
+    const isTelegramWebApp = useAppStore(state => state.isTelegramWebApp);
     const isGameFound = useGuestGameStore(state => state.isGameFound);
 
     const [
@@ -87,11 +89,12 @@ export const Navbar = () => {
                         <MdInfoOutline className='mainIcon'/>
                     </MyButton>
 
-                    <MyButton className={styles.mainBtn} onClick={onFullscreenClick}>
-                        {isFullscreen
-                            ? <AiOutlineFullscreenExit className='mainIcon'/>
-                            : <AiOutlineFullscreen className='mainIcon'/>}
-                    </MyButton>
+                    {!isTelegramWebApp &&
+                        <MyButton className={styles.mainBtn} onClick={onFullscreenClick}>
+                            {isFullscreen
+                                ? <AiOutlineFullscreenExit className='mainIcon'/>
+                                : <AiOutlineFullscreen className='mainIcon'/>}
+                        </MyButton>}
                 </div>
             </div>
 

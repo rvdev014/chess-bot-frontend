@@ -82,7 +82,6 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         async onGameStarted(opponent, mySide, roomId) {
-            useLobbyStore.getState().onCancelSearch();
             try {
                 console.log('opponent', opponent)
                 const userOpponent = await MainApi.getUser(opponent.userId);
@@ -99,6 +98,8 @@ export const useGameStore = create<IGameStore>((set, get) => {
                 });
             } catch (e) {
                 console.log(e);
+            } finally {
+                useLobbyStore.getState().onCancelSearch();
             }
         },
 

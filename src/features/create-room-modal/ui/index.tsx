@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import styles from "./styles.module.scss";
-import {Loader, Modal, Select} from "@mantine/core";
+import {Loader, Select} from "@mantine/core";
 import {RadioButtonGroup} from "../../../shared/ui/radio-button-group";
 import {ICreateRoomForm} from "../../../shared/model/lobby/store-types.ts";
 import {useLobbyStore} from "../../../shared/model/lobby/store.ts";
@@ -10,10 +10,13 @@ import {useAppStore} from "../../../shared/model/app-store.ts";
 import {MainApi} from "../../../shared/api/main-api.ts";
 import {IFriend} from "../../../shared/model/app-store-types.ts";
 import {UI_COLOR} from "../../../shared/consts.ts";
+import {MyModal} from "../../../shared/ui/my-modal";
+import {getFriendsData} from "../../../shared/utils.ts";
 
 export const CreateRoomModal: FC = () => {
 
     const me = useAppStore(state => state.me);
+    const isTelegramWebApp = useAppStore(state => state.isTelegramWebApp);
     const [friends, setFriends] = React.useState<IFriend[]>([]);
 
     const [
@@ -57,33 +60,11 @@ export const CreateRoomModal: FC = () => {
         onSubmitCreateRoomForm(fields)
     }
 
+
     if (isWaitingFriend) {
         return (
-            <Modal
-                title='Ожидание друга'
-                opened={isWaitingFriend}
-                onClose={() => {
-                }}
-                withCloseButton={false}
-                closeOnClickOutside={false}
-                centered
-            >
+            <MyModal title='Ожидание друга' opened={isWaitingFriend}>
                 <p className={styles.text}>Ссылка на игру отправлена другу</p>
-                {/*<div className={styles.inviteUrlWrapper}>
-                    <Input
-                        size='xs'
-                        defaultValue={inviteUrl}
-                        className={styles.inviteUrl}
-                        readOnly={true}
-                    />
-                    <MyButton
-                        size='xs'
-                        className={styles.btn}
-                        onClick={() => navigator.clipboard.writeText(inviteUrl)}
-                    >
-                        <FaCopy/>
-                    </MyButton>
-                </div>*/}
                 <div className={styles.inviteLoaderWrapper}>
                     <div className={styles.inviteLoader}>
                         <Loader color={UI_COLOR} size='md'/>
@@ -91,25 +72,15 @@ export const CreateRoomModal: FC = () => {
                     </div>
                     <MyButton className={styles.cancelBtn} onClick={onCancelWaitingFriend}>Отмена</MyButton>
                 </div>
-            </Modal>
+            </MyModal>
         );
     }
 
-    if (!isCreateRoomModal) return null;
-
     return (
-        <Modal
+        <MyModal
             opened={isCreateRoomModal}
             onClose={onCloseCreateRoomModal}
-            size='xs'
             title='Создать комнату'
-            transitionProps={{transition: 'fade', duration: 200}}
-            overlayProps={{
-                backgroundOpacity: 0.55,
-                blur: 3,
-            }}
-            centered
-            closeOnClickOutside={false}
         >
             <form className={styles.formWrapper} onSubmit={onSubmitForm}>
                 <RadioButtonGroup
@@ -124,22 +95,20 @@ export const CreateRoomModal: FC = () => {
                     onChange={item => onChangeField('timeLimit', item.value)}
                 />
 
-                <Select
-                    label="Выберите друга"
-                    className={styles.field}
-                    value={fields.friendId}
-                    placeholder={friends?.length > 0 ? 'Выберите друга' : 'Сначала добавьте друга'}
-                    data={friends.map(friend => {
-                        return ({
-                            value: parseInt(friend?.friend_id) === parseInt(me?.user_id) ? friend.user_id.toString() : friend.friend_id.toString(),
-                            label: parseInt(friend?.friend_id) === parseInt(me?.user_id) ? friend?.user_name : friend?.friend_name
-                        });
-                    })}
-                    onChange={value => onChangeField('friendId', value)}
-                />
+                {isTelegramWebApp &&
+                    <Select
+                        size='lg'
+                        label="Выберите друга"
+                        className={styles.field}
+                        value={fields.friendId}
+                        placeholder={friends?.length > 0 ? 'Выберите друга' : 'Сначала добавьте друга'}
+                        data={me ? getFriendsData(friends, me) : []}
+                        // data={friends.map(friend => ({value: friend.friend_id.toString(), label: friend.friend_name}))}
+                        onChange={value => onChangeField('friendId', value)}
+                    />}
 
                 <MyButton type='submit'>Пригласить друга</MyButton>
             </form>
-        </Modal>
+        </MyModal>
     );
 };

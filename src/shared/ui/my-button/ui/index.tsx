@@ -10,7 +10,7 @@ interface IProps extends DefaultProps {
 export const MyButton: FC<IProps> = ({...props}) => {
     return (
         <Button
-            size={'sm'}
+            size='lg'
             color={UI_COLOR}
             {...props}
         >

@@ -8,6 +8,7 @@ import {gameOverLabels} from "../../game-panel/model/utils.ts";
 import {GameOverReasonType, SideType} from "../../../shared/model/game/store-types.ts";
 import {GiChessQueen} from "react-icons/gi";
 import {formatTime} from "../../timer/model/utils.ts";
+import {MyModal} from "../../../shared/ui/my-modal";
 
 interface IProps {
     winner: SideType | null;
@@ -33,19 +34,11 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
     }
 
     return (
-        <Modal
+        <MyModal
             // title={gameOverReason ?? 'Game Over'}
             opened={isOpen}
             onClose={() => setOpen(false)}
-            transitionProps={{transition: 'fade', duration: 200}}
-            overlayProps={{
-                backgroundOpacity: 0.55,
-                blur: 3,
-            }}
-            size={'xs'}
             withCloseButton={false}
-            closeOnClickOutside={false}
-            centered
         >
             <div className={styles.gameOverModal}>
                 <p className={styles.title}>{getReasonLabel()}</p>
@@ -79,6 +72,6 @@ export const GameOverPopup: FC<IProps> = ({winner, gameOverReason, isOpen, setOp
                     </MyButton>
                 </div>
             </div>
-        </Modal>
+        </MyModal>
     );
 };

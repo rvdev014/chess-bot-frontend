@@ -56,13 +56,14 @@ export const GuestGamePage = () => {
         };
     }, []);
 
+    if (isLoading) {
+        return <ModalLoader opened={isLoading}/>
+    }
+
     return (
         <>
             {isGameFound ?
-                <>
-                    <GuestGamePanel/>
-                    <ModalLoader opened={isLoading}/>
-                </> :
+                <GuestGamePanel/> :
                 <h3 className='title-sm'>Room id is invalid!</h3>}
         </>
     );

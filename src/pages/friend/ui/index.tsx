@@ -56,6 +56,10 @@ export const FriendGamePage = () => {
     }, []);
 
     function renderContent() {
+        if (isLoading) {
+            return <ModalLoader opened={isLoading}/>
+        }
+
         if (!opponent) {
             return <div className='title-sm'>RoomId is invalid!</div>
         }
