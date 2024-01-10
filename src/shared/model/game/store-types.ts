@@ -26,6 +26,13 @@ export interface IMoveState {
     blackTimeLeft: number;
 }
 
+export interface IGameStartState {
+    opponent: ISocketClient;
+    mySide: SideType;
+    roomId: string;
+    timeLimit: number;
+}
+
 export interface IGameOverState {
     winner: SideType;
     reason: GameOverReasonType;
@@ -47,7 +54,7 @@ export interface IBoardState {
 
 export interface IGameStore extends IBoardState {
     isGameStarted: boolean;
-    onGameStarted(opponent: ISocketClient, mySide: SideType, roomId: string): void;
+    onGameStarted(gameStartState: IGameStartState): void;
 
     winner: SideType | null;
     gameOverReason: GameOverReasonType | null;

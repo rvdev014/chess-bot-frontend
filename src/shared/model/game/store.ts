@@ -81,20 +81,22 @@ export const useGameStore = create<IGameStore>((set, get) => {
             }
         },
 
-        async onGameStarted(opponent, mySide, roomId) {
+        async onGameStarted(gameStartState) {
             try {
-                console.log('opponent', opponent)
-                const userOpponent = await MainApi.getUser(opponent.userId);
+                console.log('opponent', gameStartState.opponent)
+                const userOpponent = await MainApi.getUser(gameStartState.opponent.userId);
                 // only 15 minutes for online plays
-                const timeLimit = 15 * 60;
+                const defaultTimeLimit = 15 * 60;
+                const timeLimit = gameStartState.timeLimit || defaultTimeLimit;
+
                 set({
-                    mySide,
-                    roomId,
+                    mySide: gameStartState.mySide,
+                    roomId: gameStartState.roomId,
                     timeLimit,
                     myTimeLeft: timeLimit,
                     opponentTimeLeft: timeLimit,
                     opponent: userOpponent,
-                    isMyTurn: mySide === 'white',
+                    isMyTurn: gameStartState.mySide === 'white',
                 });
             } catch (e) {
                 console.log(e);
@@ -152,7 +154,6 @@ export const useGameStore = create<IGameStore>((set, get) => {
         },
 
         onGameOver(winner, reason) {
-            console.log('asdadsasdds')
             set({
                 isGameOver: true,
                 isGameOverPopup: true,
@@ -183,25 +184,12 @@ export const useGameStore = create<IGameStore>((set, get) => {
                     inviteUrl,
                     friendIds
                 })
-                /*notifications.show({
-                    title: 'Успешно',
-                    message: 'Ссылка отправлена друзьям',
-                })*/
             } catch (e: any) {
                 console.log(e);
-                /*notifications.show({
-                    title: e?.response?.code,
-                    message: 'Ошибка при отправке приглашения',
-                })*/
             }
         },
 
         onShareClick() {
-            /*const roomId = get().roomId;
-            const url = `http://localhost:5173/guest/${roomId}`;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Copied to clipboard');
-            });*/
             set({isSharePopup: true});
         },
 

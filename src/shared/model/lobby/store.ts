@@ -57,11 +57,12 @@ export const useLobbyStore = create<ILobbyStore>((set, get) => {
         },
 
         onSubmitCreateRoomForm(fields) {
+            const me = useAppStore.getState().me;
             set({
                 isCreateRoomModal: false,
                 isWaitingFriend: true,
             })
-            socket.emit('game:create-room', fields);
+            socket.emit('game:create-room', me?.user_id, fields);
         },
 
         onSubmitGameOptionsForm(fields) {

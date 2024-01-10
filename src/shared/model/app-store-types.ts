@@ -43,6 +43,7 @@ export interface ITgDataUnsafe {
 
 export interface IAppStore {
     me: IUserData | null;
+    isAppLoading: boolean;
     isTelegramWebApp: boolean;
 
     setMe: (me: IUserData) => void;

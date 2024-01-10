@@ -29,8 +29,8 @@ export function openConfirm(children: ReactNode, onConfirm: () => void) {
 export function getFriendsData(data: IFriend[], me: IUserData) {
     return data.map(friend => {
         return ({
-            value: friend?.friend_id === parseInt(me.user_id) ? friend.user_id.toString() : friend.friend_id.toString(),
-            label: friend?.friend_id === parseInt(me.user_id) ? friend?.user_name : friend?.friend_name
+            value: friend?.friend_id == parseInt(me.user_id) ? friend.user_id.toString() : friend.friend_id.toString(),
+            label: friend?.friend_id == parseInt(me.user_id) ? friend?.user_name : friend?.friend_name
         });
     })
 }

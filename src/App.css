@@ -4,6 +4,14 @@
     position: relative;
 }
 
+.AppLoader {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .title {
     font-size: 36px;
     line-height: 42px;
