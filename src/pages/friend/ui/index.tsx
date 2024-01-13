@@ -39,8 +39,8 @@ export const FriendGamePage = () => {
 
         socket.on('connect', onConnect);
         socket.on('disconnect', onDisconnect);
-        socket.on('game:started', (opponent, mySide, roomId) => {
-            onGameStarted(opponent, mySide, roomId)
+        socket.on('game:started', (gameStartState) => {
+            onGameStarted(gameStartState)
             setIsLoading(false);
         });
         socket.on('game:move', onOpponentMove);
