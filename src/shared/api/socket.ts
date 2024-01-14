@@ -1,7 +1,8 @@
 import {io} from 'socket.io-client';
-import {API_URL} from "../consts.ts";
+import {SOCKET_URL} from "../consts.ts";
 
-export const socket = io(API_URL);
+export const socket = io(SOCKET_URL);
+
 socket.on('connect_error', (error: any) => {
     console.error('connect_error', error)
 })
